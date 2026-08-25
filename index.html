@@ -515,7 +515,13 @@
         </div>
         <div class="field field-full"><label for="placement">Placement on body</label><input id="placement" name="placement" type="text" placeholder="e.g. inner forearm, ribs, calf"></div>
         <div class="field field-full"><label for="idea">Describe the idea</label><textarea id="idea" name="idea" placeholder="Subject matter, style, color or black-and-grey, any reference pictures or videos you'll send separately…" required></textarea></div>
-        <div class="field field-full"><label for="date">Preferred timeframe</label><input id="date" name="date" type="text" placeholder="e.g. any Thursday evening"></div>
+        <div class="field-row">
+          <div class="field"><label for="prefDate">Preferred date</label><input id="prefDate" type="date" required></div>
+          <div class="field"><label for="prefTime">Preferred time</label><input id="prefTime" type="time" required></div>
+        </div>
+        <p id="hoursHint" style="font-family:var(--mono); font-size:.78rem; color:var(--ink-dim); margin-top:-6px;">Pick a date to see available hours for that day.</p>
+        <p id="hoursError" style="font-family:var(--mono); font-size:.78rem; color:#FF5C5C; display:none; margin-top:-6px;">That time is outside available hours for the selected day — please pick a time within the range shown above.</p>
+        <input type="hidden" id="date" name="date" value="">
         <button type="submit" class="btn btn-solid" id="bookingSubmitBtn">Send request</button>
         <div class="confirm-panel" id="confirmPanel"><strong>Request received.</strong>We'll get back to you within 2 business days with a quote and open dates. Prefer to chat now? <a href="https://ig.me/m/coastanova" target="_blank" rel="noopener">Message us on Instagram</a> or call/text 719-726-1174.</div>
         <div class="confirm-panel" id="errorPanel" style="border-color: #FF5C5C;"><strong style="color:#FF5C5C;">Something went wrong.</strong>Your request wasn't sent — please try again, or reach out directly on <a href="https://ig.me/m/coastanova" target="_blank" rel="noopener">Instagram</a> or call/text 719-726-1174.</div>
@@ -627,7 +633,57 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   });
 
-  // ---------- Booking form ----------
+  // ---------- Preferred date/time: enforce real availability ----------
+  // Mirrors the hours shown in the Availability section above.
+  var HOURS_BY_DAY = {
+    0: { start: "17:00", end: "23:00", label: "5:00 PM–11:00 PM" }, // Sun
+    1: { start: "12:00", end: "23:00", label: "12:00 PM–11:00 PM" }, // Mon
+    2: { start: "12:00", end: "23:00", label: "12:00 PM–11:00 PM" }, // Tue
+    3: { start: "12:00", end: "23:00", label: "12:00 PM–11:00 PM" }, // Wed
+    4: { start: "17:00", end: "23:00", label: "5:00 PM–11:00 PM" }, // Thu
+    5: { start: "17:00", end: "23:00", label: "5:00 PM–11:00 PM" }, // Fri
+    6: { start: "17:00", end: "23:00", label: "5:00 PM–11:00 PM" }  // Sat
+  };
+  var DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+
+  var prefDate = document.getElementById('prefDate');
+  var prefTime = document.getElementById('prefTime');
+  var hoursHint = document.getElementById('hoursHint');
+  var hoursError = document.getElementById('hoursError');
+  var hiddenDateField = document.getElementById('date');
+
+  // Can't book in the past
+  prefDate.min = new Date().toISOString().slice(0, 10);
+
+  function currentDayRule(){
+    if (!prefDate.value) return null;
+    // Parse as local date (avoid UTC shift from new Date("YYYY-MM-DD"))
+    var parts = prefDate.value.split('-');
+    var d = new Date(parseInt(parts[0],10), parseInt(parts[1],10) - 1, parseInt(parts[2],10));
+    return { dayIndex: d.getDay(), dayName: DAY_NAMES[d.getDay()], rule: HOURS_BY_DAY[d.getDay()] };
+  }
+
+  function updateHoursUI(){
+    var info = currentDayRule();
+    if (!info) {
+      hoursHint.textContent = 'Pick a date to see available hours for that day.';
+      prefTime.removeAttribute('min');
+      prefTime.removeAttribute('max');
+      return;
+    }
+    hoursHint.textContent = info.dayName + ' hours: ' + info.rule.label;
+    prefTime.min = info.rule.start;
+    prefTime.max = info.rule.end;
+  }
+
+  function isTimeValid(){
+    var info = currentDayRule();
+    if (!info || !prefTime.value) return false;
+    return prefTime.value >= info.rule.start && prefTime.value <= info.rule.end;
+  }
+
+  prefDate.addEventListener('change', updateHoursUI);
+  updateHoursUI();
   // Submits natively (HTML form -> hidden iframe) instead of fetch().
   // fetch()/XHR calls to script.google.com are a common target for ad
   // blockers and privacy extensions, which silently drop the request with
@@ -642,7 +698,24 @@ document.addEventListener('DOMContentLoaded', function(){
   var hiddenFrame = document.getElementById('hiddenBookingFrame');
   var armed = false;
 
-  form.addEventListener('submit', function(){
+  form.addEventListener('submit', function(e){
+    hoursError.style.display = 'none';
+
+    if (!isTimeValid()) {
+      e.preventDefault();
+      hoursError.style.display = 'block';
+      prefTime.focus();
+      hoursError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return;
+    }
+
+    // Build a readable combined value for the Sheet, e.g. "Tuesday, Sep 2 2026 at 6:30 PM"
+    var info = currentDayRule();
+    var dateObj = new Date(prefDate.value + 'T' + prefTime.value);
+    var timeLabel = dateObj.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    var dateLabel = dateObj.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+    hiddenDateField.value = dateLabel + ' at ' + timeLabel;
+
     // Do NOT preventDefault — let the browser submit the form for real.
     confirmPanel.classList.remove('show');
     errorPanel.classList.remove('show');
