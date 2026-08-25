@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Danny Roberson — Custom Tattoo Studio</title>
+<title>Danny Roberson — Tattoo Artist, Breckenridge CO</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Work+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper: #ECE4D3;
-    --paper-dim: #DFD5BE;
-    --ink: #17140F;
-    --ink-soft: #2A2620;
-    --stencil: #6C5CA6;
-    --stencil-soft: rgba(108,92,166,0.35);
-    --flash: #A9342E;
-    --sage: #6E7452;
-    --display: 'Fraunces', serif;
+    --bg: #0A0B0D;
+    --panel: #16181B;
+    --panel-2: #1D2023;
+    --ink: #F2F2ED;
+    --ink-dim: #B9BCB8;
+    --green: #3DFA84;
+    --green-dim: rgba(61,250,132,0.28);
+    --green-glow: rgba(61,250,132,0.45);
+    --display: 'Bangers', cursive;
     --body: 'Work Sans', sans-serif;
     --mono: 'JetBrains Mono', monospace;
   }
@@ -24,7 +24,7 @@
   *{ box-sizing: border-box; margin:0; padding:0; }
   html{ scroll-behavior: smooth; }
   body{
-    background: var(--paper);
+    background: var(--bg);
     color: var(--ink);
     font-family: var(--body);
     overflow-x: hidden;
@@ -32,199 +32,217 @@
   }
   a{ color: inherit; text-decoration: none; }
   img{ display:block; max-width:100%; }
-  ::selection{ background: var(--stencil); color: var(--paper); }
-  :focus-visible{ outline: 2px solid var(--stencil); outline-offset: 3px; }
+  ::selection{ background: var(--green); color: var(--bg); }
+  :focus-visible{ outline: 2px solid var(--green); outline-offset: 3px; }
 
   .wrap{ max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+  /* halftone dot texture, the recurring comic-print motif */
+  .halftone{
+    position:absolute; inset:0; pointer-events:none;
+    background-image: radial-gradient(circle, var(--green-dim) 1px, transparent 1.3px);
+    background-size: 11px 11px;
+    opacity: .5;
+  }
 
   /* ---------- NAV ---------- */
   nav{
     position: fixed; top:0; left:0; right:0; z-index: 100;
     display:flex; align-items:center; justify-content:space-between;
-    padding: 22px 32px;
-    transition: background .4s ease, padding .4s ease, border-color .4s ease;
+    padding: 20px 32px;
+    transition: background .3s ease, padding .3s ease, border-color .3s ease;
     border-bottom: 1px solid transparent;
   }
   nav.scrolled{
-    background: rgba(236,228,211,0.92);
+    background: rgba(10,11,13,0.92);
     backdrop-filter: blur(8px);
-    padding: 14px 32px;
-    border-bottom: 1px solid rgba(23,20,15,0.12);
+    padding: 12px 32px;
+    border-bottom: 1px solid var(--green-dim);
   }
-  .brand{ display:flex; align-items:center; gap:10px; font-family: var(--display); font-weight:700; font-size: 1.4rem; letter-spacing: .02em; }
-  .brand .mark{ width: 26px; height:26px; }
-  .brand .mark svg{ width:100%; height:100%; }
-  .navlinks{ display:flex; gap: 34px; font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; font-weight:500; }
-  .navlinks a{ position:relative; padding-bottom:4px; }
-  .navlinks a::after{ content:''; position:absolute; left:0; bottom:0; width:0; height:1px; background: var(--flash); transition: width .3s ease; }
+  .brand{ font-family: var(--display); font-size: 1.7rem; letter-spacing: .03em; color: var(--ink); text-shadow: 2px 2px 0 var(--green); }
+  .navlinks{ display:flex; gap: 30px; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; font-weight:600; }
+  .navlinks a{ position:relative; padding-bottom:4px; color: var(--ink-dim); }
+  .navlinks a:hover{ color: var(--ink); }
+  .navlinks a::after{ content:''; position:absolute; left:0; bottom:0; width:0; height:2px; background: var(--green); transition: width .25s ease; }
   .navlinks a:hover::after{ width:100%; }
-  .navlinks a.cta{ text-transform: none; letter-spacing: normal; font-size: .85rem; border: 1px solid var(--ink); padding: 8px 16px; border-radius: 2px; }
+  .navlinks a.cta{ text-transform: none; letter-spacing: normal; font-size: .85rem; color: var(--bg); background: var(--green); padding: 9px 18px; border: 2px solid var(--green); font-weight:700; }
   .navlinks a.cta::after{ display:none; }
-  .navlinks a.cta:hover{ background: var(--ink); color: var(--paper); }
+  .navlinks a.cta:hover{ background: var(--bg); color: var(--green); }
 
   /* ---------- HERO ---------- */
   .hero{ position:relative; min-height: 100svh; display:flex; align-items:center; overflow:hidden; padding-top: 90px; }
-  .hero-lines{ position:absolute; inset:0; z-index:0; opacity:.5; pointer-events:none; }
+  .hero-lines{ position:absolute; inset:0; z-index:0; opacity:.6; pointer-events:none; }
   .hero-lines svg{ width:100%; height:100%; }
   .hero-inner{ position:relative; z-index:1; width:100%; }
-  .eyebrow{ font-family: var(--mono); font-size: .78rem; letter-spacing: .18em; text-transform: uppercase; color: var(--flash); margin-bottom: 22px; display:flex; align-items:center; gap:10px; }
-  .eyebrow::before{ content:''; width:26px; height:1px; background: var(--flash); }
-  h1.hero-title{ font-family: var(--display); font-weight: 600; line-height: .96; font-size: clamp(3rem, 8.6vw, 7.2rem); letter-spacing: -.01em; max-width: 15ch; }
-  h1.hero-title em{ font-style: italic; font-weight:500; color: var(--stencil); }
-  h1.hero-title span{ display:block; overflow:hidden; }
-  .word-in{ opacity:0; transform: translateY(100%); display:inline-block; animation: wordUp .9s cubic-bezier(.16,.8,.3,1) forwards; }
-  @keyframes wordUp{ to{ opacity:1; transform: translateY(0); } }
-  .hero-sub{ margin-top: 28px; max-width: 46ch; font-size: 1.08rem; line-height:1.6; color: var(--ink-soft); }
+  .eyebrow{ font-family: var(--mono); font-size: .78rem; letter-spacing: .2em; text-transform: uppercase; color: var(--green); margin-bottom: 20px; display:flex; align-items:center; gap:10px; }
+  .eyebrow::before{ content:''; width:26px; height:2px; background: var(--green); }
+  h1.hero-title{
+    font-family: var(--display); font-weight: 400; line-height: .92;
+    font-size: clamp(3.4rem, 11vw, 8.5rem); letter-spacing: .01em; color: var(--ink);
+    text-shadow: 3px 3px 0 var(--green), 6px 6px 0 rgba(0,0,0,0.6);
+  }
+  .stat-block{ margin-top: 30px; display:flex; flex-wrap:wrap; gap: 12px 28px; }
+  .stat-block span{ font-family: var(--mono); font-size: .82rem; letter-spacing:.04em; text-transform:uppercase; color: var(--ink); display:flex; align-items:center; gap:8px; }
+  .stat-block span::before{ content:''; width:8px; height:8px; background: var(--green); transform: rotate(45deg); flex-shrink:0; }
   .hero-actions{ margin-top: 40px; display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
-  .btn{ font-family: var(--body); font-weight:500; font-size: .92rem; padding: 15px 28px; border-radius: 2px; border: 1px solid var(--ink); cursor:pointer; transition: all .3s ease; display:inline-flex; align-items:center; gap:10px; }
-  .btn-solid{ background: var(--ink); color: var(--paper); }
-  .btn-solid:hover{ background: var(--flash); border-color: var(--flash); }
-  .btn-ghost:hover{ background: var(--ink); color: var(--paper); }
-  .scroll-cue{ position:absolute; bottom: 38px; left: 32px; }
-  .scroll-cue .line{ width:1px; height:40px; background: linear-gradient(var(--ink-soft), transparent); animation: pulseline 2.4s ease-in-out infinite; }
-  @keyframes pulseline{ 0%,100%{opacity:.3} 50%{opacity:1} }
+  .btn{
+    font-family: var(--body); font-weight:700; font-size: .92rem; padding: 15px 28px;
+    border: 2px solid var(--green); cursor:pointer; transition: transform .15s ease, box-shadow .15s ease;
+    display:inline-flex; align-items:center; gap:10px; text-transform:uppercase; letter-spacing:.03em;
+  }
+  .btn-solid{ background: var(--green); color: var(--bg); box-shadow: 5px 5px 0 var(--ink); }
+  .btn-ghost{ background: transparent; color: var(--ink); box-shadow: 5px 5px 0 var(--green); }
+  .btn:hover, .btn:active{ transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--green) !important; }
   #needleTrail{ position:absolute; inset:0; z-index:2; pointer-events:none; }
 
-  /* ---------- REVEAL (JS adds .is-visible; CSS default is visible so content
-     never depends on JS running — this is the fix for "animation doesn't come") ---------- */
-  .reveal{ opacity:1; transform: translateY(0); transition: opacity .9s cubic-bezier(.16,.8,.3,1), transform .9s cubic-bezier(.16,.8,.3,1); }
-  .js .reveal{ opacity:0; transform: translateY(36px); }
+  /* ---------- REVEAL ---------- */
+  .reveal{ opacity:1; transform: translateY(0); transition: opacity .8s cubic-bezier(.16,.8,.3,1), transform .8s cubic-bezier(.16,.8,.3,1); }
+  .js .reveal{ opacity:0; transform: translateY(32px); }
   .js .reveal.is-visible{ opacity:1; transform: translateY(0); }
-
-  .reveal-stagger > *{ opacity:1; transform: translateY(0); transition: opacity .7s ease, transform .7s ease; }
-  .js .reveal-stagger > *{ opacity:0; transform: translateY(28px); }
-  .js .reveal-stagger.is-visible > *{ opacity:1; transform: translateY(0); }
-  .reveal-stagger.is-visible > *:nth-child(1){ transition-delay: .05s; }
-  .reveal-stagger.is-visible > *:nth-child(2){ transition-delay: .12s; }
-  .reveal-stagger.is-visible > *:nth-child(3){ transition-delay: .19s; }
-  .reveal-stagger.is-visible > *:nth-child(4){ transition-delay: .26s; }
-  .reveal-stagger.is-visible > *:nth-child(5){ transition-delay: .33s; }
-  .reveal-stagger.is-visible > *:nth-child(6){ transition-delay: .40s; }
+  .reveal-stagger > *{ opacity:1; transform: translateY(0) scale(1); transition: opacity .6s ease, transform .6s ease; }
+  .js .reveal-stagger > *{ opacity:0; transform: translateY(24px) scale(.97); }
+  .js .reveal-stagger.is-visible > *{ opacity:1; transform: translateY(0) scale(1); }
+  .reveal-stagger.is-visible > *:nth-child(1){ transition-delay: .04s; }
+  .reveal-stagger.is-visible > *:nth-child(2){ transition-delay: .10s; }
+  .reveal-stagger.is-visible > *:nth-child(3){ transition-delay: .16s; }
+  .reveal-stagger.is-visible > *:nth-child(4){ transition-delay: .22s; }
+  .reveal-stagger.is-visible > *:nth-child(5){ transition-delay: .28s; }
+  .reveal-stagger.is-visible > *:nth-child(6){ transition-delay: .34s; }
+  .reveal-stagger.is-visible > *:nth-child(7){ transition-delay: .40s; }
 
   @media (prefers-reduced-motion: reduce){
     .js .reveal, .js .reveal-stagger > *, .word-in{ opacity:1 !important; transform:none !important; animation:none !important; }
     *{ scroll-behavior: auto !important; }
   }
 
-  section{ padding: 130px 0; position:relative; }
-  .section-head{ margin-bottom: 64px; max-width: 640px; }
-  .kicker{ font-family: var(--mono); font-size: .76rem; letter-spacing:.18em; text-transform:uppercase; color: var(--sage); margin-bottom: 16px; }
-  h2{ font-family: var(--display); font-weight:600; font-size: clamp(2.1rem, 4vw, 3.4rem); letter-spacing:-.01em; }
-  .section-sub{ margin-top:18px; color: var(--ink-soft); font-size: 1.02rem; line-height:1.6; max-width: 54ch; }
+  section{ padding: 120px 0; position:relative; }
+  .section-head{ margin-bottom: 56px; max-width: 640px; }
+  .kicker{ font-family: var(--mono); font-size: .76rem; letter-spacing:.2em; text-transform:uppercase; color: var(--green); margin-bottom: 14px; }
+  h2{ font-family: var(--display); font-weight:400; font-size: clamp(2.4rem, 5vw, 4rem); letter-spacing:.01em; color: var(--ink); }
+  .section-sub{ margin-top:16px; color: var(--ink-dim); font-size: 1rem; line-height:1.6; max-width: 54ch; }
 
   /* ---------- ABOUT ---------- */
   .about-wrap{ display:grid; grid-template-columns: .9fr 1.1fr; gap: 60px; align-items:center; }
   .about-photos{ position:relative; }
-  .about-photos img{ width:100%; border-radius: 2px; }
+  .about-photos img{ width:100%; filter: grayscale(1) contrast(1.15) brightness(.95); border: 3px solid var(--ink); box-shadow: 8px 8px 0 var(--green); }
   .about-photos .p1{ position:relative; z-index:2; }
-  .about-photos .p2{
-    position:absolute; width: 58%; bottom: -40px; right: -34px; z-index:3;
-    border: 6px solid var(--paper); box-shadow: 0 18px 40px rgba(23,20,15,0.25);
-  }
-  .about-text p{ color: var(--ink-soft); font-size: 1.02rem; line-height:1.75; margin-bottom: 18px; }
-  .about-stats{ display:flex; gap: 40px; margin-top: 34px; }
-  .about-stats div{ }
-  .about-stats .num{ font-family: var(--display); font-size: 2rem; font-weight:600; color: var(--flash); }
-  .about-stats .lbl{ font-family: var(--mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.08em; color: var(--ink-soft); }
+  .about-photos .p2{ position:absolute; width: 56%; bottom: -44px; right: -30px; z-index:3; }
+  .caption-box{ background: var(--panel); border: 2px solid var(--green); padding: 26px 28px; margin-bottom: 20px; position:relative; }
+  .caption-box::before{ content:'"'; position:absolute; top:-18px; left:20px; font-family: var(--display); font-size:2.4rem; color: var(--green); background: var(--bg); padding: 0 8px; }
+  .about-text p{ color: var(--ink-dim); font-size: 1rem; line-height:1.75; margin-bottom: 16px; }
+  .about-stats{ display:flex; gap: 40px; margin-top: 30px; }
+  .about-stats .num{ font-family: var(--display); font-size: 2.4rem; color: var(--green); text-shadow: 2px 2px 0 rgba(0,0,0,0.5); }
+  .about-stats .lbl{ font-family: var(--mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.08em; color: var(--ink-dim); }
   @media (max-width: 860px){
     .about-wrap{ grid-template-columns: 1fr; }
-    .about-photos{ margin-bottom: 60px; }
+    .about-photos{ margin-bottom: 70px; }
     .about-photos .p2{ right: 0; }
   }
 
+  /* ---------- AVAILABILITY ---------- */
+  .schedule-grid{ display:grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: var(--green-dim); border: 2px solid var(--green-dim); }
+  .day-panel{ background: var(--panel); padding: 22px 14px; text-align:center; transition: background .2s ease; }
+  .day-panel:hover{ background: var(--panel-2); }
+  .day-panel .day{ font-family: var(--mono); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; color: var(--green); margin-bottom: 10px; }
+  .day-panel .hours{ font-family: var(--body); font-weight:600; font-size:.86rem; line-height:1.4; }
+  @media (max-width: 860px){ .schedule-grid{ grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 560px){ .schedule-grid{ grid-template-columns: repeat(2, 1fr); } }
+  .avail-note{ margin-top: 26px; font-family: var(--mono); font-size:.82rem; color: var(--ink-dim); letter-spacing:.02em; }
+  .avail-note strong{ color: var(--green); }
+
   /* ---------- WORK / GALLERY ---------- */
   .filters{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 44px; }
-  .filter-btn{ font-family: var(--mono); font-size:.76rem; letter-spacing:.05em; text-transform:uppercase; padding: 9px 16px; border: 1px solid rgba(23,20,15,0.25); border-radius: 999px; cursor:pointer; background: transparent; color: var(--ink); transition: all .25s ease; }
-  .filter-btn:hover{ border-color: var(--ink); }
-  .filter-btn.active{ background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .filter-btn{ font-family: var(--mono); font-size:.74rem; letter-spacing:.05em; text-transform:uppercase; padding: 9px 16px; border: 2px solid var(--green-dim); border-radius: 999px; cursor:pointer; background: transparent; color: var(--ink-dim); transition: all .2s ease; }
+  .filter-btn:hover{ border-color: var(--green); color: var(--ink); }
+  .filter-btn.active{ background: var(--green); color: var(--bg); border-color: var(--green); font-weight:700; }
 
-  .gallery{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
-  .piece{ position:relative; aspect-ratio: 4/5; overflow:hidden; cursor:pointer; background: var(--ink); border: 1px solid rgba(23,20,15,0.1); }
-  .piece img{ position:absolute; inset:0; width:100%; height:100%; object-fit: cover; transform: scale(1.06); transition: transform 1.2s ease; }
-  .piece:hover img{ transform: scale(1); }
+  .gallery{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .piece{ position:relative; aspect-ratio: 4/5; overflow:hidden; cursor:pointer; background: var(--bg); border: 2px solid var(--panel-2); transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease; }
+  .piece:hover{ border-color: var(--green); transform: translate(-2px,-2px); box-shadow: 5px 5px 0 var(--green-dim); }
+  .piece img{ position:absolute; inset:0; width:100%; height:100%; object-fit: cover; filter: grayscale(1) contrast(1.1); transform: scale(1.05); transition: transform 1s ease, filter .4s ease; }
+  .piece:hover img{ transform: scale(1); filter: grayscale(0.4) contrast(1.1); }
   .piece .ghost{
-    position:absolute; inset:0;
-    background:
-      repeating-linear-gradient(115deg, transparent 0 8px, var(--stencil-soft) 8px 9px),
-      repeating-linear-gradient(25deg, transparent 0 10px, rgba(23,20,15,0.35) 10px 11px),
-      var(--paper-dim);
-    opacity: 1; transition: opacity .9s ease;
+    position:absolute; inset:0; background: var(--bg);
+    background-image: radial-gradient(circle, var(--green-dim) 1.4px, transparent 1.8px);
+    background-size: 9px 9px;
+    opacity: 1; transition: opacity .8s ease;
   }
-  .js .piece .ghost{ opacity: .96; }
+  .js .piece .ghost{ opacity: 1; }
   .js .piece.is-visible .ghost{ opacity: 0; }
   .piece .tag{
-    position:absolute; left:14px; bottom:14px; z-index:2; font-family: var(--mono);
-    font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color: var(--paper);
-    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
-    opacity:0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease;
+    position:absolute; left:12px; bottom:12px; z-index:2; font-family: var(--mono);
+    font-size:.66rem; letter-spacing:.06em; text-transform:uppercase; color: var(--ink);
+    text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+    opacity:0; transform: translateY(8px); transition: opacity .3s ease, transform .3s ease;
   }
   .piece:hover .tag{ opacity:1; transform: translateY(0); }
 
   @media (max-width: 860px){ .gallery{ grid-template-columns: repeat(2,1fr); } }
-  @media (max-width: 540px){ .gallery{ grid-template-columns: 1fr 1fr; gap:3px; } }
+  @media (max-width: 540px){ .gallery{ grid-template-columns: 1fr 1fr; gap:4px; } }
 
   /* ---------- PRICING ---------- */
-  .price-note{ font-family: var(--mono); font-size:.82rem; color: var(--ink-soft); margin-bottom: 50px; padding: 16px 20px; border-left: 2px solid var(--stencil); background: rgba(108,92,166,0.06); max-width: 62ch; line-height:1.7; }
-  .price-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(23,20,15,0.15); border: 1px solid rgba(23,20,15,0.15); }
-  .price-card{ background: var(--paper); padding: 38px 30px; position:relative; transition: background .3s ease; }
-  .price-card:hover{ background: var(--paper-dim); }
-  .price-card .size-label{ font-family: var(--display); font-size: 1.5rem; font-weight:600; margin-bottom:6px; }
-  .price-card .size-dims{ font-family: var(--mono); font-size:.72rem; color: var(--ink-soft); text-transform:uppercase; letter-spacing:.05em; margin-bottom: 22px; }
-  .price-card .price-range{ font-family: var(--mono); font-size: 1.85rem; font-weight:500; color: var(--flash); }
-  .price-card .price-range span{ font-size:.95rem; color: var(--ink-soft); font-weight:400; }
-  .price-card .price-time{ margin-top: 14px; font-size:.85rem; color: var(--ink-soft); }
-  @media (max-width: 860px){ .price-grid{ grid-template-columns: repeat(2,1fr); } }
-  @media (max-width: 560px){ .price-grid{ grid-template-columns: 1fr; } }
+  .price-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .price-card{ background: var(--panel); border: 2px solid var(--green-dim); padding: 34px 26px; transition: border-color .2s ease, transform .15s ease; }
+  .price-card:hover{ border-color: var(--green); transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--green-dim); }
+  .price-card .size-label{ font-family: var(--display); font-size: 1.8rem; color: var(--ink); margin-bottom:6px; }
+  .price-card .size-dims{ font-family: var(--mono); font-size:.72rem; color: var(--ink-dim); text-transform:uppercase; letter-spacing:.05em; margin-bottom: 20px; }
+  .price-card .price-range{ font-family: var(--mono); font-weight:700; font-size: 1.9rem; color: var(--green); }
+  .price-card .price-time{ margin-top: 14px; font-size:.85rem; color: var(--ink-dim); }
+  @media (max-width: 860px){ .price-grid{ grid-template-columns: 1fr; } }
 
-  .price-extra{ display:flex; gap: 40px; margin-top: 46px; flex-wrap:wrap; }
-  .price-extra div{ flex:1; min-width: 220px; }
-  .price-extra h4{ font-family: var(--mono); font-size:.74rem; text-transform:uppercase; letter-spacing:.1em; color: var(--sage); margin-bottom:10px; }
-  .price-extra p{ font-size:.92rem; color: var(--ink-soft); line-height:1.6; }
+  .price-badges{ display:flex; gap: 14px; margin-top: 40px; flex-wrap:wrap; }
+  .price-badges span{
+    font-family: var(--mono); font-size:.78rem; letter-spacing:.04em; text-transform:uppercase;
+    border: 2px solid var(--green); color: var(--green); padding: 10px 18px; font-weight:600;
+  }
 
   /* ---------- TESTIMONIALS ---------- */
-  .testi-row{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
-  .testi-card{ background: var(--ink); color: var(--paper); padding: 38px 32px; border-radius: 2px; display:flex; flex-direction:column; justify-content:space-between; min-height: 260px; position:relative; overflow:hidden; }
-  .testi-card::before{ content:'"'; position:absolute; top:-10px; right:16px; font-family: var(--display); font-size: 7rem; color: rgba(236,228,211,0.06); font-weight:600; }
-  .testi-quote{ font-family: var(--display); font-size: 1.18rem; line-height:1.5; font-style:italic; font-weight:500; position:relative; z-index:1; }
-  .testi-meta{ margin-top: 26px; display:flex; align-items:center; gap:12px; font-family: var(--mono); font-size:.74rem; letter-spacing:.04em; }
-  .testi-meta .dot{ width:6px; height:6px; border-radius:50%; background: var(--flash); }
+  .testi-row{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .testi-card{ background: var(--panel); border: 2px solid var(--ink); box-shadow: 6px 6px 0 var(--green); padding: 32px 28px; display:flex; flex-direction:column; justify-content:space-between; min-height: 230px; position:relative; }
+  .testi-quote{ font-family: var(--body); font-weight:500; font-size: 1.02rem; line-height:1.55; font-style:italic; color: var(--ink); }
+  .testi-meta{ margin-top: 22px; display:flex; align-items:center; gap:10px; font-family: var(--mono); font-size:.72rem; letter-spacing:.03em; color: var(--ink-dim); }
+  .testi-meta .dot{ width:6px; height:6px; background: var(--green); transform: rotate(45deg); }
   @media (max-width: 900px){ .testi-row{ grid-template-columns: 1fr; } }
 
   /* ---------- BOOKING ---------- */
-  .book-wrap{ display:grid; grid-template-columns: .85fr 1.15fr; gap: 70px; align-items:start; }
-  .book-info h3{ font-family: var(--display); font-size: 1.5rem; font-weight:600; margin-bottom:16px; }
-  .book-info p{ color: var(--ink-soft); line-height:1.7; font-size:.98rem; margin-bottom: 26px; }
+  .book-wrap{ display:grid; grid-template-columns: .85fr 1.15fr; gap: 60px; align-items:start; }
+  .book-info h3{ font-family: var(--display); font-size: 1.7rem; color: var(--ink); margin-bottom:16px; }
+  .book-info p{ color: var(--ink-dim); line-height:1.7; font-size:.96rem; margin-bottom: 24px; }
   .book-info ul{ list-style:none; }
-  .book-info li{ display:flex; gap: 14px; padding: 16px 0; border-top: 1px solid rgba(23,20,15,0.15); font-size:.92rem; }
-  .book-info li span.n{ font-family: var(--mono); color: var(--stencil); font-size:.8rem; padding-top:2px; }
+  .book-info li{ display:flex; gap: 14px; padding: 15px 0; border-top: 1px solid var(--green-dim); font-size:.9rem; color: var(--ink-dim); }
+  .book-info li span.n{ font-family: var(--mono); color: var(--green); font-size:.8rem; padding-top:2px; font-weight:700; }
 
-  form{ display:flex; flex-direction:column; gap: 20px; }
-  .field-row{ display:grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .field label{ display:block; font-family: var(--mono); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; color: var(--ink-soft); }
-  .field input, .field select, .field textarea{ width:100%; background: transparent; border:none; border-bottom: 1px solid rgba(23,20,15,0.3); padding: 11px 2px; font-family: var(--body); font-size: .96rem; color: var(--ink); transition: border-color .3s ease; border-radius:0; }
+  form{ display:flex; flex-direction:column; gap: 18px; }
+  .field-row{ display:grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .field label{ display:block; font-family: var(--mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; color: var(--ink-dim); }
+  .field input, .field select, .field textarea{
+    width:100%; background: var(--panel); border: 2px solid var(--panel-2); padding: 11px 12px;
+    font-family: var(--body); font-size: .94rem; color: var(--ink); transition: border-color .2s ease; border-radius:0;
+  }
   .field textarea{ resize: vertical; min-height: 90px; }
-  .field input:focus, .field select:focus, .field textarea:focus{ border-color: var(--flash); outline:none; }
+  .field input:focus, .field select:focus, .field textarea:focus{ border-color: var(--green); outline:none; }
   .field-full{ grid-column: 1 / -1; }
   form .btn{ align-self:flex-start; margin-top: 6px; }
   @media (max-width: 860px){ .book-wrap{ grid-template-columns: 1fr; } .field-row{ grid-template-columns:1fr; } }
 
-  .confirm-panel{ display:none; padding: 26px; border: 1px solid var(--sage); background: rgba(110,116,82,0.08); font-size:.92rem; line-height:1.6; margin-top: 4px; }
+  .confirm-panel{ display:none; padding: 24px; border: 2px solid var(--green); background: var(--panel); font-size:.92rem; line-height:1.6; margin-top: 4px; color: var(--ink-dim); }
   .confirm-panel.show{ display:block; }
-  .confirm-panel strong{ font-family: var(--display); font-size:1.05rem; display:block; margin-bottom:6px; }
+  .confirm-panel strong{ font-family: var(--display); font-size:1.2rem; display:block; margin-bottom:8px; color: var(--green); }
+  .confirm-panel a{ color: var(--green); }
 
   /* ---------- FOOTER ---------- */
-  footer{ background: var(--ink); color: var(--paper); padding: 70px 0 34px; }
-  .foot-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap: 40px; padding-bottom: 50px; border-bottom: 1px solid rgba(236,228,211,0.15); }
-  .foot-brand{ font-family: var(--display); font-size: 1.8rem; font-weight:700; max-width: 320px; }
-  .foot-cols{ display:flex; gap: 70px; flex-wrap:wrap; }
-  .foot-col h5{ font-family: var(--mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.1em; color: rgba(236,228,211,0.5); margin-bottom:16px; }
-  .foot-col p, .foot-col a{ display:block; font-size:.88rem; color: rgba(236,228,211,0.85); margin-bottom:8px; }
-  .foot-col a:hover{ color: var(--flash); }
-  .foot-bottom{ display:flex; justify-content:space-between; padding-top: 26px; font-family: var(--mono); font-size:.72rem; color: rgba(236,228,211,0.4); flex-wrap:wrap; gap:10px; }
+  footer{ background: var(--panel); border-top: 2px solid var(--green-dim); padding: 64px 0 30px; position:relative; }
+  .foot-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap: 40px; padding-bottom: 44px; border-bottom: 1px solid var(--green-dim); }
+  .foot-brand{ font-family: var(--display); font-size: 2rem; color: var(--ink); text-shadow: 2px 2px 0 var(--green); }
+  .foot-cols{ display:flex; gap: 60px; flex-wrap:wrap; }
+  .foot-col h5{ font-family: var(--mono); font-size:.68rem; text-transform:uppercase; letter-spacing:.1em; color: var(--green); margin-bottom:14px; }
+  .foot-col p, .foot-col a{ display:block; font-size:.86rem; color: var(--ink-dim); margin-bottom:8px; }
+  .foot-col a:hover{ color: var(--green); }
+  .foot-bottom{ display:flex; justify-content:space-between; padding-top: 24px; font-family: var(--mono); font-size:.7rem; color: rgba(242,242,237,0.35); flex-wrap:wrap; gap:10px; }
 
   @media (max-width: 720px){
     .navlinks{ display:none; }
-    section{ padding: 90px 0; }
+    section{ padding: 84px 0; }
     .wrap{ padding: 0 20px; }
   }
 </style>
@@ -232,12 +250,10 @@
 <body>
 
 <nav id="nav">
-  <div class="brand">
-    <span class="mark"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4 22 L18 8 M14 4 L22 4 L22 12"/><circle cx="6" cy="20" r="1.4" fill="currentColor" stroke="none"/></svg></span>
-    Danny
-  </div>
+  <div class="brand">DANNY</div>
   <div class="navlinks">
     <a href="#about">About</a>
+    <a href="#availability">Hours</a>
     <a href="#work">Work</a>
     <a href="#pricing">Pricing</a>
     <a href="#book" class="cta">Book a session</a>
@@ -246,47 +262,98 @@
 
 <section class="hero">
   <div class="hero-lines" id="heroLines">
+    <div class="halftone"></div>
     <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
-      <g stroke="#17140F" stroke-width="0.6" fill="none" opacity="0.5">
-        <path d="M900,60 C1050,120 1120,260 1040,380 C960,500 780,520 720,420" />
-        <path d="M950,90 C1080,150 1140,270 1070,370" />
-        <circle cx="150" cy="620" r="70" />
-        <circle cx="150" cy="620" r="100" opacity="0.5"/>
-        <path d="M60,700 Q150,560 260,700 T460,700" />
+      <defs>
+        <linearGradient id="cityGlow" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stop-color="#3DFA84" stop-opacity="0.35"/>
+          <stop offset="100%" stop-color="#3DFA84" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- distant skyline, original silhouette blocks -->
+      <g fill="#111417" opacity="0.9">
+        <rect x="780" y="420" width="60" height="380"/>
+        <rect x="850" y="340" width="44" height="460"/>
+        <rect x="905" y="460" width="80" height="340"/>
+        <rect x="1000" y="300" width="50" height="500"/>
+        <rect x="1060" y="410" width="70" height="390"/>
+        <rect x="1140" y="380" width="40" height="420"/>
       </g>
+      <!-- lit windows, halftone-dot rhythm -->
+      <g fill="#3DFA84" opacity="0.5">
+        <rect x="790" y="440" width="6" height="6"/><rect x="805" y="460" width="6" height="6"/><rect x="790" y="500" width="6" height="6"/>
+        <rect x="860" y="370" width="6" height="6"/><rect x="875" y="400" width="6" height="6"/><rect x="860" y="440" width="6" height="6"/>
+        <rect x="1010" y="330" width="6" height="6"/><rect x="1025" y="360" width="6" height="6"/><rect x="1010" y="400" width="6" height="6"/>
+        <rect x="1070" y="440" width="6" height="6"/><rect x="1085" y="470" width="6" height="6"/>
+      </g>
+      <!-- ground glow + rain streaks, original linework -->
+      <rect x="0" y="700" width="1200" height="100" fill="url(#cityGlow)"/>
+      <g stroke="#3DFA84" stroke-width="1" opacity="0.25">
+        <path d="M120,120 L90,260"/><path d="M180,90 L140,240"/><path d="M60,160 L20,300"/>
+        <path d="M980,60 L940,200"/><path d="M1050,100 L1020,220"/>
+      </g>
+      <!-- soft foreground silhouette, an original figure, not a character -->
+      <path d="M40,800 L40,540 C40,470 90,430 150,430 C210,430 260,470 260,540 L260,800 Z" fill="#0A0B0D" opacity="0.85"/>
     </svg>
   </div>
   <div class="wrap hero-inner">
-    <p class="eyebrow">Custom tattoo studio — Breckenridge, CO</p>
-    <h1 class="hero-title" id="heroTitle"><span>Work worth</span> <span><em>wearing</em> for life.</span></h1>
-    <p class="hero-sub">One artist, one chair, no flash-off-the-wall shortcuts. Fine-line, blackwork, anime, and custom illustrative pieces designed around your story.</p>
+    <p class="eyebrow">Tattoo artist — Breckenridge, CO — appointment only</p>
+    <h1 class="hero-title" id="heroTitle">DANNY<br>ROBERSON</h1>
+    <div class="stat-block">
+      <span>Black &amp; grey artist</span>
+      <span>Anime &amp; comic</span>
+      <span>Traditional</span>
+      <span>Fine line &amp; tiny</span>
+    </div>
     <div class="hero-actions">
-      <a href="#book" class="btn btn-solid">Book a consultation</a>
+      <a href="#book" class="btn btn-solid">Book a session</a>
       <a href="#work" class="btn btn-ghost">See the work</a>
     </div>
   </div>
-  <div class="scroll-cue"><span class="line"></span></div>
   <canvas id="needleTrail" aria-hidden="true"></canvas>
 </section>
 
-<section id="about" style="background: var(--paper-dim);">
+<section id="about">
+  <div class="halftone" style="opacity:.15;"></div>
   <div class="wrap">
     <div class="about-wrap">
       <div class="about-photos reveal">
-        <img class="p1" src="images/artist-portrait.jpg" alt="NIL, tattoo artist, portrait">
-        <img class="p2" src="images/artist-at-work.jpg" alt="NIL tattooing a client">
+        <img class="p1" src="images/artist-portrait.jpg" alt="Danny Roberson, tattoo artist, portrait">
+        <img class="p2" src="images/artist-at-work.jpg" alt="Danny Roberson tattooing a client">
       </div>
       <div class="about-text reveal">
         <p class="kicker">The artist</p>
-        <h2 style="margin-bottom:22px;">Hey, I'm Danny.</h2>
-        <p>I've been tattooing custom pieces for clients who want something that's actually theirs — not a design pulled off a wall. Blackwork, neo-traditional, anime, lettering, whatever the idea calls for.</p>
-        <p>Every session starts with a real conversation about placement, scale, and how the piece will age with you — not just what looks good in a photo.</p>
+        <h2 style="margin-bottom:26px;">Hey, I'm Danny.</h2>
+        <div class="caption-box">
+          <p style="margin:0;">Always been an artist. Started creating art concepts and brands, and eventually got into tattoos — and found myself.</p>
+        </div>
+        <p>I enjoy what I do. For me it's all about a good vibe — letting the client feel comfortable and relaxed while getting good quality art and work, for an affordable rate. No up-charge, no location up-charges.</p>
         <div class="about-stats">
-          <div><div class="num">9+</div><div class="lbl">Years tattooing</div></div>
+          <div><div class="num">4</div><div class="lbl">Years tattooing</div></div>
           <div><div class="num">100%</div><div class="lbl">Custom design</div></div>
         </div>
       </div>
     </div>
+  </div>
+</section>
+
+<section id="availability" style="background: var(--panel);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="kicker">When to catch me</p>
+      <h2>Availability</h2>
+      <p class="section-sub">By appointment only — no walk-ins. Reach out ahead to lock in a slot.</p>
+    </div>
+    <div class="schedule-grid reveal-stagger">
+      <div class="day-panel"><div class="day">Mon</div><div class="hours">12pm–11pm</div></div>
+      <div class="day-panel"><div class="day">Tue</div><div class="hours">12pm–11pm</div></div>
+      <div class="day-panel"><div class="day">Wed</div><div class="hours">12pm–11pm</div></div>
+      <div class="day-panel"><div class="day">Thu</div><div class="hours">5pm–11pm</div></div>
+      <div class="day-panel"><div class="day">Fri</div><div class="hours">5pm–11pm</div></div>
+      <div class="day-panel"><div class="day">Sat</div><div class="hours">5pm–11pm</div></div>
+      <div class="day-panel"><div class="day">Sun</div><div class="hours">5pm–11pm</div></div>
+    </div>
+    <p class="avail-note"><strong>Appointment only.</strong> Pictures and videos of your idea always welcome — send whatever helps explain it.</p>
   </div>
 </section>
 
@@ -295,56 +362,74 @@
     <div class="section-head reveal">
       <p class="kicker">Selected work</p>
       <h2>Recent pieces</h2>
-      <p class="section-sub">A mix of blackwork, neo-traditional, anime, and lettering — all custom, all healed or fresh work from the chair.</p>
+      <p class="section-sub">Black &amp; grey, anime and comic, traditional, fine-line and tiny — all custom.</p>
     </div>
 
     <div class="filters reveal">
       <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="neotrad">Neo-traditional</button>
-      <button class="filter-btn" data-filter="blackwork">Blackwork</button>
+      <button class="filter-btn" data-filter="neotrad">Traditional</button>
+      <button class="filter-btn" data-filter="blackwork">Black &amp; grey</button>
       <button class="filter-btn" data-filter="illustrative">Illustrative</button>
-      <button class="filter-btn" data-filter="anime">Anime</button>
+      <button class="filter-btn" data-filter="anime">Anime &amp; comic</button>
       <button class="filter-btn" data-filter="lettering">Lettering</button>
     </div>
 
     <div class="gallery reveal-stagger" id="gallery">
-      <div class="piece" data-style="neotrad"><img src="images/tattoo-neotrad-poppy-razor.jpg" alt="Poppy flowers and straight razor tattoo"><div class="ghost"></div><div class="tag">Poppies & razor — neo-traditional</div></div>
+      <div class="piece" data-style="neotrad"><img src="images/tattoo-neotrad-poppy-razor.jpg" alt="Poppy flowers and straight razor tattoo"><div class="ghost"></div><div class="tag">Poppies &amp; razor — traditional</div></div>
       <div class="piece" data-style="illustrative"><img src="images/tattoo-illustrative-vampire-skull.jpg" alt="Vampire skull with flowers tattoo"><div class="ghost"></div><div class="tag">Vampire skull — illustrative</div></div>
-      <div class="piece" data-style="blackwork"><img src="images/tattoo-blackwork-discgolf.jpg" alt="Disc golf basket blackwork tattoo"><div class="ghost"></div><div class="tag">Disc golf basket — blackwork</div></div>
-      <div class="piece" data-style="blackwork"><img src="images/tattoo-blackwork-bats.jpg" alt="Bats forearm blackwork tattoo"><div class="ghost"></div><div class="tag">Bats — blackwork</div></div>
+      <div class="piece" data-style="blackwork"><img src="images/tattoo-blackwork-discgolf.jpg" alt="Disc golf basket blackwork tattoo"><div class="ghost"></div><div class="tag">Disc golf basket — black &amp; grey</div></div>
+      <div class="piece" data-style="blackwork"><img src="images/tattoo-blackwork-bats.jpg" alt="Bats forearm blackwork tattoo"><div class="ghost"></div><div class="tag">Bats — black &amp; grey</div></div>
       <div class="piece" data-style="illustrative"><img src="images/tattoo-illustrative-cat.jpg" alt="Cartoon cat tattoo"><div class="ghost"></div><div class="tag">Cat — illustrative linework</div></div>
-      <div class="piece" data-style="neotrad"><img src="images/tattoo-neotrad-cowboy-skull.jpg" alt="Cowboy skull with rose tattoo"><div class="ghost"></div><div class="tag">Cowboy skull — neo-traditional</div></div>
+      <div class="piece" data-style="neotrad"><img src="images/tattoo-neotrad-cowboy-skull.jpg" alt="Cowboy skull with rose tattoo"><div class="ghost"></div><div class="tag">Cowboy skull — traditional</div></div>
       <div class="piece" data-style="anime"><img src="images/tattoo-anime-portrait.jpg" alt="Anime character portrait tattoo"><div class="ghost"></div><div class="tag">Anime portrait — fine-line</div></div>
-      <div class="piece" data-style="illustrative"><img src="images/tattoo-illustrative-skull-knife.jpg" alt="Skull with knife tattoo"><div class="ghost"></div><div class="tag">Skull & blade — illustrative</div></div>
+      <div class="piece" data-style="illustrative"><img src="images/tattoo-illustrative-skull-knife.jpg" alt="Skull with knife tattoo"><div class="ghost"></div><div class="tag">Skull &amp; blade — illustrative</div></div>
       <div class="piece" data-style="lettering"><img src="images/tattoo-lettering-tiles.jpg" alt="Custom lettering tile tattoo"><div class="ghost"></div><div class="tag">Custom lettering</div></div>
-      <div class="piece" data-style="blackwork"><img src="images/tattoo-blackwork-aztec.jpg" alt="Aztec-style ornamental jaguar tattoo"><div class="ghost"></div><div class="tag">Ornamental jaguar — blackwork</div></div>
-      <div class="piece" data-style="anime"><img src="images/tattoo-anime-asta.jpg" alt="Anime character with sword tattoo"><div class="ghost"></div><div class="tag">Anime — linework</div></div>
-      <div class="piece" data-style="neotrad"><img src="images/tattoo-neotrad-hibiscus.jpg" alt="Hibiscus flower ankle tattoo"><div class="ghost"></div><div class="tag">Hibiscus — neo-traditional</div></div>
+      <div class="piece" data-style="blackwork"><img src="images/tattoo-blackwork-aztec.jpg" alt="Aztec-style ornamental jaguar tattoo"><div class="ghost"></div><div class="tag">Ornamental jaguar — black &amp; grey</div></div>
+      <div class="piece" data-style="anime"><img src="images/tattoo-anime-asta.jpg" alt="Anime character with sword tattoo"><div class="ghost"></div><div class="tag">Anime &amp; comic — linework</div></div>
+      <div class="piece" data-style="neotrad"><img src="images/tattoo-neotrad-hibiscus.jpg" alt="Hibiscus flower ankle tattoo"><div class="ghost"></div><div class="tag">Hibiscus — traditional</div></div>
+      <div class="piece" data-style="blackwork"><img src="images/tattoo-blackwork-scorpion.jpg" alt="Tribal scorpion foot tattoo"><div class="ghost"></div><div class="tag">Scorpion — black &amp; grey</div></div>
+      <div class="piece" data-style="illustrative"><img src="images/tattoo-illustrative-cowboy-globe.jpg" alt="Cowboy hat disco globe and shell tattoo"><div class="ghost"></div><div class="tag">Cowboy globe &amp; shell — illustrative</div></div>
+      <div class="piece" data-style="lettering"><img src="images/tattoo-lettering-professional.jpg" alt="Professional script lettering tattoo"><div class="ghost"></div><div class="tag">"Professional" — script lettering</div></div>
+      <div class="piece" data-style="neotrad"><img src="images/tattoo-neotrad-mug-palmtrees.jpg" alt="Dripping mug and palm trees with rooster tattoo"><div class="ghost"></div><div class="tag">Mug &amp; palm trees — traditional</div></div>
+      <div class="piece" data-style="illustrative"><img src="images/tattoo-illustrative-angel-ak.jpg" alt="Angel holding rifle with Trust No One text tattoo"><div class="ghost"></div><div class="tag">Angel — illustrative</div></div>
+      <div class="piece" data-style="blackwork"><img src="images/tattoo-blackwork-sleeve.jpg" alt="Blackwork forearm sleeve with multiple designs"><div class="ghost"></div><div class="tag">Forearm sleeve — black &amp; grey</div></div>
     </div>
   </div>
 </section>
 
-<section id="pricing" style="background: var(--paper-dim);">
+<section id="pricing" style="background: var(--panel);">
   <div class="wrap">
     <div class="section-head reveal">
-      <p class="kicker">Investment</p>
-      <h2>Pricing guide</h2>
-      <p class="section-sub">Ballpark 2026 market rates for custom work — actual quotes are set at consultation based on placement, detail, and color. A non-refundable deposit ($75–150, applied to the final price) holds your appointment.</p>
+      <p class="kicker">Rates</p>
+      <h2>Pricing</h2>
+      <p class="section-sub">Straightforward, affordable rates. No up-charge, no location up-charges — what you see is what you pay.</p>
     </div>
 
     <div class="price-grid reveal-stagger">
-      <div class="price-card"><div class="size-label">Tiny</div><div class="size-dims">Under 2×2 in · 10–20 min</div><div class="price-range">$<span class="count" data-target="60">0</span><span> – $100</span></div><div class="price-time">Shop minimum applies</div></div>
-      <div class="price-card"><div class="size-label">Small</div><div class="size-dims">2–3 in · 30–60 min</div><div class="price-range">$<span class="count" data-target="100">0</span><span> – $250</span></div><div class="price-time">Most single-session flash pieces</div></div>
-      <div class="price-card"><div class="size-label">Medium</div><div class="size-dims">4–6 in · 1–3 hrs</div><div class="price-range">$<span class="count" data-target="250">0</span><span> – $500</span></div><div class="price-time">Custom linework, portraits, tribal-scale</div></div>
-      <div class="price-card"><div class="size-label">Large</div><div class="size-dims">Half-limb / panel · 3–6 hrs</div><div class="price-range">$<span class="count" data-target="500">0</span><span> – $1,200</span></div><div class="price-time">Usually 1–2 sessions</div></div>
-      <div class="price-card"><div class="size-label">Sleeve / Back</div><div class="size-dims">Multi-session</div><div class="price-range">$<span class="count" data-target="1500">0</span><span> – $5,000+</span></div><div class="price-time">Scoped and paid per session</div></div>
-      <div class="price-card"><div class="size-label">Hourly rate</div><div class="size-dims">For time-scoped custom work</div><div class="price-range">$<span class="count" data-target="150">0</span><span> /hr</span></div><div class="price-time">$150–200/hr, mid-tier experienced-artist rate</div></div>
+      <div class="price-card">
+        <div class="size-label">Flash</div>
+        <div class="size-dims">Pre-drawn design, single session</div>
+        <div class="price-range">$20 – $40</div>
+        <div class="price-time">Fastest way to get inked</div>
+      </div>
+      <div class="price-card">
+        <div class="size-label">Tiny</div>
+        <div class="size-dims">Small custom piece</div>
+        <div class="price-range">$40 – $50</div>
+        <div class="price-time">Fine-line and minimal work</div>
+      </div>
+      <div class="price-card">
+        <div class="size-label">Hourly</div>
+        <div class="size-dims">Larger custom pieces</div>
+        <div class="price-range">$150 / hr</div>
+        <div class="price-time">For anything time-scoped</div>
+      </div>
     </div>
 
-    <div class="price-extra reveal">
-      <div><h4>Why ranges, not fixed prices</h4><p>Size sets the canvas, but detail, color saturation, and placement set the hours — and hours set the price. A quote is locked in at consultation.</p></div>
-      <div><h4>Deposits & rebooking</h4><p>Deposits are non-refundable but transfer once if you reschedule with 48+ hours' notice. No-shows forfeit the deposit and require a new one to rebook.</p></div>
-      <div><h4>Touch-ups</h4><p>One complimentary touch-up within 8 weeks of healing for work booked directly through Danny's studio.</p></div>
+    <div class="price-badges reveal">
+      <span>No up-charge</span>
+      <span>No location up-charges</span>
+      <span>Appointment only</span>
     </div>
   </div>
 </section>
@@ -358,13 +443,13 @@
     </div>
     <div class="testi-row reveal-stagger">
       <div class="testi-card"><p class="testi-quote">Sent one reference photo and a paragraph of rambling, got back a design that felt more "me" than what I asked for.</p><div class="testi-meta"><span class="dot"></span>R. Delgado — forearm piece</div></div>
-      <div class="testi-card"><p class="testi-quote">Steady hand, checked in constantly, healed cleaner than my last two tattoos combined.</p><div class="testi-meta"><span class="dot"></span>J. Okafor — blackwork panel</div></div>
+      <div class="testi-card"><p class="testi-quote">Chill vibe the whole session. Didn't feel rushed, didn't feel upsold. Just good work at a fair price.</p><div class="testi-meta"><span class="dot"></span>J. Okafor — black &amp; grey panel</div></div>
       <div class="testi-card"><p class="testi-quote">Booked a consult expecting a hard sell. Got an honest "this will look better smaller" instead. Trust that.</p><div class="testi-meta"><span class="dot"></span>M. Tran — lettering</div></div>
     </div>
   </div>
 </section>
 
-<section id="book" style="background: var(--paper-dim);">
+<section id="book" style="background: var(--panel);">
   <div class="wrap">
     <div class="section-head reveal">
       <p class="kicker">Get started</p>
@@ -373,13 +458,14 @@
     <div class="book-wrap">
       <div class="book-info reveal">
         <h3>How booking works</h3>
-        <p>This form sends your request through — it doesn't hold a slot automatically. Expect a reply within 2 business days with a quote and open dates.</p>
+        <p>Appointment only — this form sends your request through, it doesn't hold a slot automatically. Pictures and videos of your idea are always welcome, send whatever helps explain it.</p>
         <ul>
           <li><span class="n">01</span> Tell us the idea, size, and placement.</li>
-          <li><span class="n">02</span> We reply with a rough quote and consultation options.</li>
-          <li><span class="n">03</span> Consultation (in-studio or video) locks the design.</li>
-          <li><span class="n">04</span> Deposit confirms your session date.</li>
+          <li><span class="n">02</span> We reply with a quote and open times.</li>
+          <li><span class="n">03</span> Lock in your appointment.</li>
+          <li><span class="n">04</span> Show up, get tattooed, relax.</li>
         </ul>
+        <p style="margin-top:24px;">Prefer to call or text? <strong style="color:var(--ink);">719-726-1174</strong></p>
       </div>
       <form id="bookingForm">
         <div class="field-row">
@@ -391,74 +477,58 @@
           <div class="field"><label for="size">Estimated size</label>
             <select id="size" name="size" required>
               <option value="">Select…</option>
-              <option>Tiny (under 2in)</option><option>Small (2–3in)</option><option>Medium (4–6in)</option>
-              <option>Large (half-limb+)</option><option>Sleeve / multi-session</option><option>Not sure yet</option>
+              <option>Flash</option><option>Tiny</option><option>Small custom</option>
+              <option>Medium custom</option><option>Large / multi-hour</option><option>Not sure yet</option>
             </select>
           </div>
         </div>
         <div class="field field-full"><label for="placement">Placement on body</label><input id="placement" name="placement" type="text" placeholder="e.g. inner forearm, ribs, calf"></div>
-        <div class="field field-full"><label for="idea">Describe the idea</label><textarea id="idea" name="idea" placeholder="Subject matter, style, color or black-and-grey, any reference images you'll send separately…" required></textarea></div>
-        <div class="field field-full"><label for="date">Preferred timeframe</label><input id="date" name="date" type="text" placeholder="e.g. any weekday in October"></div>
+        <div class="field field-full"><label for="idea">Describe the idea</label><textarea id="idea" name="idea" placeholder="Subject matter, style, color or black-and-grey, any reference pictures or videos you'll send separately…" required></textarea></div>
+        <div class="field field-full"><label for="date">Preferred timeframe</label><input id="date" name="date" type="text" placeholder="e.g. any Thursday evening"></div>
         <button type="submit" class="btn btn-solid" id="bookingSubmitBtn">Send request</button>
-        <div class="confirm-panel" id="confirmPanel"><strong>Request received.</strong>We'll get back to you within 2 business days with a quote and open dates. Prefer to chat now? <a href="https://ig.me/m/hello_im_nil" target="_blank" rel="noopener" style="text-decoration:underline;">Message us on Instagram</a>.</div>
-        <div class="confirm-panel" id="errorPanel" style="border-color: var(--flash); background: rgba(169,52,46,0.08);"><strong>Something went wrong.</strong>Your request wasn't sent — please try again, or message us directly on <a href="https://ig.me/m/hello_im_nil" target="_blank" rel="noopener" style="text-decoration:underline;">Instagram</a>.</div>
+        <div class="confirm-panel" id="confirmPanel"><strong>Request received.</strong>We'll get back to you within 2 business days with a quote and open dates. Prefer to chat now? <a href="https://ig.me/m/coastanova" target="_blank" rel="noopener">Message us on Instagram</a> or call/text 719-726-1174.</div>
+        <div class="confirm-panel" id="errorPanel" style="border-color: #FF5C5C;"><strong style="color:#FF5C5C;">Something went wrong.</strong>Your request wasn't sent — please try again, or reach out directly on <a href="https://ig.me/m/coastanova" target="_blank" rel="noopener">Instagram</a> or call/text 719-726-1174.</div>
       </form>
     </div>
   </div>
 </section>
 
 <footer>
+  <div class="halftone" style="opacity:.12;"></div>
   <div class="wrap">
     <div class="foot-top">
-      <div class="foot-brand">Danny Roberson</div>
+      <div class="foot-brand">DANNY ROBERSON</div>
       <div class="foot-cols">
-        <div class="foot-col"><h5>Studio</h5><p>Breckenridge, CO</p><p>Tue–Sat, 11am–7pm</p></div>
-        <div class="foot-col"><h5>Contact</h5><a href="#">hello@dannyroberson.example</a><a href="https://instagram.com/hello_im_nil" target="_blank" rel="noopener">@hello_im_nil</a></div>
-        <div class="foot-col"><h5>Studio policy</h5><p>18+ only</p><p>Consult required for custom work</p></div>
+        <div class="foot-col"><h5>Studio</h5><p>Breckenridge, CO</p><p>Appointment only</p></div>
+        <div class="foot-col"><h5>Contact</h5><a href="tel:+17197261174">(719) 726-1174</a><a href="https://instagram.com/coastanova" target="_blank" rel="noopener">@coastanova</a></div>
+        <div class="foot-col"><h5>Studio policy</h5><p>18+ only</p><p>No up-charge, no location up-charges</p></div>
       </div>
     </div>
     <div class="foot-bottom">
-      <span>© 2026 Danny Roberson. Update contact details before launch.</span>
+      <span>© 2026 Danny Roberson.</span>
       <span>Site by you, with Claude</span>
     </div>
   </div>
 </footer>
 
 <script>
-// Add .js to <html> immediately — CSS only hides reveal elements when this
-// class is present, so if JS fails to load or errors out, everything is
-// simply visible by default instead of stuck invisible.
 document.documentElement.classList.add('js');
 
 document.addEventListener('DOMContentLoaded', function(){
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ---------- Nav scroll state ----------
   var nav = document.getElementById('nav');
   window.addEventListener('scroll', function(){
     nav.classList.toggle('scrolled', window.scrollY > 40);
   }, { passive: true });
 
-  // ---------- Hero parallax ----------
   var heroLines = document.getElementById('heroLines');
   if (!reduceMotion) {
     window.addEventListener('scroll', function(){
-      heroLines.style.transform = 'translateY(' + (window.scrollY * 0.18) + 'px)';
+      heroLines.style.transform = 'translateY(' + (window.scrollY * 0.15) + 'px)';
     }, { passive: true });
   }
 
-  // ---------- Hero headline: assemble line by line ----------
-  document.querySelectorAll('#heroTitle > span').forEach(function(lineEl, lineIdx){
-    var html = lineEl.innerHTML;
-    lineEl.innerHTML = '';
-    var wrapper = document.createElement('span');
-    wrapper.className = 'word-in';
-    wrapper.style.animationDelay = (0.15 + lineIdx * 0.12) + 's';
-    wrapper.innerHTML = html;
-    lineEl.appendChild(wrapper);
-  });
-
-  // ---------- Scroll reveal (with fallback) ----------
   var revealEls = document.querySelectorAll('.reveal, .reveal-stagger, .piece');
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function(entries){
@@ -471,22 +541,16 @@ document.addEventListener('DOMContentLoaded', function(){
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
     revealEls.forEach(function(el){ io.observe(el); });
 
-    // Safety net: on very short/tall viewports some browsers report a zero
-    // intersection ratio on first paint. Force a re-check shortly after load.
     setTimeout(function(){
       revealEls.forEach(function(el){
         var r = el.getBoundingClientRect();
-        if (r.top < window.innerHeight && r.bottom > 0) {
-          el.classList.add('is-visible');
-        }
+        if (r.top < window.innerHeight && r.bottom > 0) { el.classList.add('is-visible'); }
       });
     }, 400);
   } else {
-    // No IntersectionObserver support: just show everything.
     revealEls.forEach(function(el){ el.classList.add('is-visible'); });
   }
 
-  // ---------- Signature move: needle-trail cursor in hero ----------
   (function needleTrail(){
     var canvas = document.getElementById('needleTrail');
     var hero = document.querySelector('.hero');
@@ -494,29 +558,23 @@ document.addEventListener('DOMContentLoaded', function(){
     var ctx = canvas.getContext('2d');
     var points = [];
     var raf = null;
-
     function resize(){ canvas.width = hero.offsetWidth; canvas.height = hero.offsetHeight; }
     resize();
     window.addEventListener('resize', resize);
-
-    function addPoint(x, y){
-      points.push({ x: x, y: y, life: 1 });
-      if (points.length > 60) points.shift();
-      if (!raf) raf = requestAnimationFrame(draw);
-    }
     hero.addEventListener('pointermove', function(e){
       var rect = hero.getBoundingClientRect();
-      addPoint(e.clientX - rect.left, e.clientY - rect.top);
+      points.push({ x: e.clientX - rect.left, y: e.clientY - rect.top, life: 1 });
+      if (points.length > 60) points.shift();
+      if (!raf) raf = requestAnimationFrame(draw);
     });
-
     function draw(){
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       points.forEach(function(p){
         p.life -= 0.02;
         if (p.life > 0){
           ctx.beginPath();
-          ctx.arc(p.x, p.y, 1.6, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(108,92,166,' + (p.life * 0.8) + ')';
+          ctx.rect(p.x - 1.5, p.y - 1.5, 3, 3);
+          ctx.fillStyle = 'rgba(61,250,132,' + (p.life * 0.8) + ')';
           ctx.fill();
         }
       });
@@ -525,33 +583,6 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   })();
 
-  // ---------- Pricing count-up ----------
-  var countEls = document.querySelectorAll('.count');
-  if ('IntersectionObserver' in window) {
-    var countIo = new IntersectionObserver(function(entries){
-      entries.forEach(function(entry){
-        if (!entry.isIntersecting) return;
-        var el = entry.target;
-        var target = parseInt(el.dataset.target, 10);
-        if (reduceMotion) { el.textContent = target.toLocaleString(); countIo.unobserve(el); return; }
-        var duration = 900;
-        var start = performance.now();
-        function tick(now){
-          var p = Math.min((now - start) / duration, 1);
-          var eased = 1 - Math.pow(1 - p, 3);
-          el.textContent = Math.round(target * eased).toLocaleString();
-          if (p < 1) requestAnimationFrame(tick);
-        }
-        requestAnimationFrame(tick);
-        countIo.unobserve(el);
-      });
-    }, { threshold: 0.4 });
-    countEls.forEach(function(el){ countIo.observe(el); });
-  } else {
-    countEls.forEach(function(el){ el.textContent = parseInt(el.dataset.target, 10).toLocaleString(); });
-  }
-
-  // ---------- Gallery filters ----------
   document.querySelectorAll('.filter-btn').forEach(function(btn){
     btn.addEventListener('click', function(){
       document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
@@ -564,10 +595,6 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   });
 
-  // ---------- Booking form ----------
-  // Submits to a Google Apps Script Web App (see booking-apps-script.gs) which
-  // logs each request to a Google Sheet and emails a notification.
-  // Replace this URL with your own deployed script's Web App URL.
   var BOOKING_ENDPOINT = "https://script.google.com/macros/s/AKfycbxbztd-zC5A1y33C4VYTihaRDFO3WwQyzO8UZCFfi4I1z3fjbwiLY8eD9CT_Yi55coo/exec";
 
   var form = document.getElementById('bookingForm');
@@ -579,15 +606,6 @@ document.addEventListener('DOMContentLoaded', function(){
     e.preventDefault();
     confirmPanel.classList.remove('show');
     errorPanel.classList.remove('show');
-
-    if (BOOKING_ENDPOINT.indexOf('PASTE_YOUR') === 0) {
-      // Endpoint not configured yet — show the confirmation anyway so the
-      // page still feels complete during development, but log a warning.
-      console.warn('Booking form: BOOKING_ENDPOINT is not set. See booking-apps-script.gs.');
-      confirmPanel.classList.add('show');
-      confirmPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      return;
-    }
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending…';
