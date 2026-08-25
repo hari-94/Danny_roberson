@@ -180,6 +180,18 @@
   @media (max-width: 860px){ .gallery{ grid-template-columns: repeat(2,1fr); } }
   @media (max-width: 540px){ .gallery{ grid-template-columns: 1fr 1fr; gap:4px; } }
 
+  /* ---------- VIDEOS ---------- */
+  .video-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .video-card{ position:relative; border: 2px solid var(--green-dim); background: var(--bg); transition: border-color .2s ease, transform .15s ease; }
+  .video-card:hover{ border-color: var(--green); transform: translate(-3px,-3px); box-shadow: 6px 6px 0 var(--green-dim); }
+  .video-card video{ width:100%; aspect-ratio: 9/16; object-fit: cover; display:block; background: #000; }
+  .video-card .tag{
+    padding: 10px 12px; font-family: var(--mono); font-size:.68rem; letter-spacing:.06em;
+    text-transform:uppercase; color: var(--ink-dim); border-top: 1px solid var(--green-dim);
+  }
+  @media (max-width: 860px){ .video-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 540px){ .video-grid{ grid-template-columns: 1fr; } }
+
   /* ---------- PRICING ---------- */
   .price-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
   .price-card{ background: var(--panel); border: 2px solid var(--green-dim); padding: 34px 26px; transition: border-color .2s ease, transform .15s ease; }
@@ -255,6 +267,7 @@
     <a href="#about">About</a>
     <a href="#availability">Hours</a>
     <a href="#work">Work</a>
+    <a href="#videos">Videos</a>
     <a href="#pricing">Pricing</a>
     <a href="#book" class="cta">Book a session</a>
   </div>
@@ -393,6 +406,24 @@
       <div class="piece" data-style="neotrad"><img src="images/tattoo-neotrad-mug-palmtrees.jpg" alt="Dripping mug and palm trees with rooster tattoo"><div class="ghost"></div><div class="tag">Mug &amp; palm trees — traditional</div></div>
       <div class="piece" data-style="illustrative"><img src="images/tattoo-illustrative-angel-ak.jpg" alt="Angel holding rifle with Trust No One text tattoo"><div class="ghost"></div><div class="tag">Angel — illustrative</div></div>
       <div class="piece" data-style="blackwork"><img src="images/tattoo-blackwork-sleeve.jpg" alt="Blackwork forearm sleeve with multiple designs"><div class="ghost"></div><div class="tag">Forearm sleeve — black &amp; grey</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="videos" style="background: var(--panel);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="kicker">In motion</p>
+      <h2>Behind the needle</h2>
+      <p class="section-sub">Live sessions and healed-work pans — sound off, tap to play.</p>
+    </div>
+    <div class="video-grid reveal-stagger">
+      <div class="video-card"><video controls preload="metadata" playsinline poster="images/video-process-sleeve-closeup-poster.jpg"><source src="videos/video-process-sleeve-closeup.mp4" type="video/mp4"></video><div class="tag">Adding to the sleeve</div></div>
+      <div class="video-card"><video controls preload="metadata" playsinline poster="images/video-process-leg-session-poster.jpg"><source src="videos/video-process-leg-session.mp4" type="video/mp4"></video><div class="tag">Leg session</div></div>
+      <div class="video-card"><video controls preload="metadata" playsinline poster="images/video-process-floral-linework-poster.jpg"><source src="videos/video-process-floral-linework.mp4" type="video/mp4"></video><div class="tag">Floral linework</div></div>
+      <div class="video-card"><video controls preload="metadata" playsinline poster="images/video-process-illustrative-portrait-poster.jpg"><source src="videos/video-process-illustrative-portrait.mp4" type="video/mp4"></video><div class="tag">Illustrative portrait</div></div>
+      <div class="video-card"><video controls preload="metadata" playsinline poster="images/video-healed-laurel-wreath-poster.jpg"><source src="videos/video-healed-laurel-wreath.mp4" type="video/mp4"></video><div class="tag">Healed — laurel wreath</div></div>
+      <div class="video-card"><video controls preload="metadata" playsinline poster="images/video-healed-moth-poster.jpg"><source src="videos/video-healed-moth.mp4" type="video/mp4"></video><div class="tag">Healed — moth</div></div>
     </div>
   </div>
 </section>
