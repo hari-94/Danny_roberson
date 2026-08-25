@@ -399,8 +399,9 @@
         <div class="field field-full"><label for="placement">Placement on body</label><input id="placement" name="placement" type="text" placeholder="e.g. inner forearm, ribs, calf"></div>
         <div class="field field-full"><label for="idea">Describe the idea</label><textarea id="idea" name="idea" placeholder="Subject matter, style, color or black-and-grey, any reference images you'll send separately…" required></textarea></div>
         <div class="field field-full"><label for="date">Preferred timeframe</label><input id="date" name="date" type="text" placeholder="e.g. any weekday in October"></div>
-        <button type="submit" class="btn btn-solid">Send request</button>
-        <div class="confirm-panel" id="confirmPanel"><strong>Request received.</strong>This is a placeholder confirmation — wire this form to an email service (e.g. Formspree) so submissions actually reach you. See the note at the end of this file.</div>
+        <button type="submit" class="btn btn-solid" id="bookingSubmitBtn">Send request</button>
+        <div class="confirm-panel" id="confirmPanel"><strong>Request received.</strong>We'll get back to you within 2 business days with a quote and open dates. Prefer to chat now? <a href="https://ig.me/m/hello_im_nil" target="_blank" rel="noopener" style="text-decoration:underline;">Message us on Instagram</a>.</div>
+        <div class="confirm-panel" id="errorPanel" style="border-color: var(--flash); background: rgba(169,52,46,0.08);"><strong>Something went wrong.</strong>Your request wasn't sent — please try again, or message us directly on <a href="https://ig.me/m/hello_im_nil" target="_blank" rel="noopener" style="text-decoration:underline;">Instagram</a>.</div>
       </form>
     </div>
   </div>
@@ -564,12 +565,48 @@ document.addEventListener('DOMContentLoaded', function(){
   });
 
   // ---------- Booking form ----------
+  // Submits to a Google Apps Script Web App (see booking-apps-script.gs) which
+  // logs each request to a Google Sheet and emails a notification.
+  // Replace this URL with your own deployed script's Web App URL.
+  var BOOKING_ENDPOINT = "https://script.google.com/macros/s/AKfycbxbztd-zC5A1y33C4VYTihaRDFO3WwQyzO8UZCFfi4I1z3fjbwiLY8eD9CT_Yi55coo/exec";
+
   var form = document.getElementById('bookingForm');
   var confirmPanel = document.getElementById('confirmPanel');
+  var errorPanel = document.getElementById('errorPanel');
+  var submitBtn = document.getElementById('bookingSubmitBtn');
+
   form.addEventListener('submit', function(e){
     e.preventDefault();
-    confirmPanel.classList.add('show');
-    confirmPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    confirmPanel.classList.remove('show');
+    errorPanel.classList.remove('show');
+
+    if (BOOKING_ENDPOINT.indexOf('PASTE_YOUR') === 0) {
+      // Endpoint not configured yet — show the confirmation anyway so the
+      // page still feels complete during development, but log a warning.
+      console.warn('Booking form: BOOKING_ENDPOINT is not set. See booking-apps-script.gs.');
+      confirmPanel.classList.add('show');
+      confirmPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    var formData = new FormData(form);
+    fetch(BOOKING_ENDPOINT, { method: 'POST', mode: 'no-cors', body: formData })
+      .then(function(){
+        confirmPanel.classList.add('show');
+        form.reset();
+      })
+      .catch(function(){
+        errorPanel.classList.add('show');
+      })
+      .finally(function(){
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Send request';
+        (confirmPanel.classList.contains('show') ? confirmPanel : errorPanel)
+          .scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
   });
 });
 </script>
