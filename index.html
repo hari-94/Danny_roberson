@@ -242,56 +242,6 @@
   .confirm-panel strong{ font-family: var(--display); font-size:1.2rem; display:block; margin-bottom:8px; color: var(--green); }
   .confirm-panel a{ color: var(--green); }
 
-  /* ---------- DATE/TIME WIDGET ---------- */
-  .slot-trigger{
-    width:100%; text-align:left; background: var(--panel); border: 2px solid var(--panel-2);
-    color: var(--ink); font-family: var(--body); font-size:.94rem; padding: 12px;
-    cursor:pointer; transition: border-color .2s ease;
-  }
-  .slot-trigger:hover, .slot-trigger:focus{ border-color: var(--green); outline:none; }
-  .slot-trigger.chosen{ color: var(--green); font-weight:600; }
-
-  .slot-overlay{
-    position: fixed; inset:0; z-index: 200; background: rgba(10,11,13,0.85);
-    display:flex; align-items:center; justify-content:center; padding: 20px;
-  }
-  .slot-panel{
-    background: var(--panel); border: 2px solid var(--green); box-shadow: 8px 8px 0 var(--green-dim);
-    padding: 24px; width: 100%; max-width: 360px; max-height: 88vh; overflow-y:auto;
-  }
-  .slot-panel-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom: 16px; }
-  .cal-month{ font-family: var(--display); font-size: 1.3rem; color: var(--ink); }
-  .cal-nav{
-    background: transparent; border: 2px solid var(--green-dim); color: var(--ink); width: 34px; height:34px;
-    font-size: 1.2rem; cursor:pointer; transition: border-color .2s ease;
-  }
-  .cal-nav:hover{ border-color: var(--green); }
-  .cal-weekdays{
-    display:grid; grid-template-columns: repeat(7, 1fr); text-align:center; margin-bottom:6px;
-    font-family: var(--mono); font-size:.68rem; color: var(--ink-dim); letter-spacing:.05em;
-  }
-  .cal-grid{ display:grid; grid-template-columns: repeat(7, 1fr); gap: 3px; margin-bottom: 18px; }
-  .cal-day{
-    aspect-ratio: 1; display:flex; align-items:center; justify-content:center;
-    font-family: var(--mono); font-size:.82rem; color: var(--ink); background: var(--panel-2);
-    cursor:pointer; border: 2px solid transparent; transition: border-color .15s ease;
-  }
-  .cal-day:hover{ border-color: var(--green-dim); }
-  .cal-day.is-empty{ background: transparent; cursor:default; }
-  .cal-day.is-past{ color: var(--ink-dim); opacity:.35; cursor:not-allowed; }
-  .cal-day.is-today{ color: var(--green); }
-  .cal-day.is-selected{ background: var(--green); color: var(--bg); font-weight:700; border-color: var(--green); }
-  .slot-times-label{ font-family: var(--mono); font-size:.74rem; color: var(--ink-dim); margin-bottom: 10px; }
-  .slot-times{ display:flex; flex-wrap:wrap; gap: 8px; }
-  .slot-btn{
-    font-family: var(--mono); font-size:.76rem; padding: 9px 12px; background: var(--panel-2);
-    border: 2px solid var(--green-dim); color: var(--ink); cursor:pointer; transition: all .15s ease;
-  }
-  .slot-btn:hover{ border-color: var(--green); }
-  .slot-btn.is-selected{ background: var(--green); color: var(--bg); border-color: var(--green); font-weight:700; }
-  .slot-btn.is-booked{ opacity:.3; text-decoration: line-through; cursor:not-allowed; border-color: var(--panel-2); }
-  .slot-btn.is-booked:hover{ border-color: var(--panel-2); }
-
   /* ---------- FOOTER ---------- */
   footer{ background: var(--panel); border-top: 2px solid var(--green-dim); padding: 64px 0 30px; position:relative; }
   .foot-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap: 40px; padding-bottom: 44px; border-bottom: 1px solid var(--green-dim); }
@@ -565,32 +515,7 @@
         </div>
         <div class="field field-full"><label for="placement">Placement on body</label><input id="placement" name="placement" type="text" placeholder="e.g. inner forearm, ribs, calf"></div>
         <div class="field field-full"><label for="idea">Describe the idea</label><textarea id="idea" name="idea" placeholder="Subject matter, style, color or black-and-grey, any reference pictures or videos you'll send separately…" required></textarea></div>
-        <div class="field field-full">
-          <label for="slotTrigger">Preferred date &amp; time</label>
-          <button type="button" id="slotTrigger" class="slot-trigger">Choose a date &amp; time</button>
-          <input type="hidden" id="prefDate" name="prefDate" value="">
-          <input type="hidden" id="prefTime" name="prefTime" value="">
-          <p id="hoursError" style="font-family:var(--mono); font-size:.78rem; color:#FF5C5C; display:none; margin-top:8px;">Please choose an available date and time slot before sending.</p>
-        </div>
-
-        <div class="slot-overlay" id="slotOverlay" hidden>
-          <div class="slot-panel" role="dialog" aria-label="Choose date and time">
-            <div class="slot-panel-head">
-              <button type="button" class="cal-nav" id="calPrev" aria-label="Previous month">‹</button>
-              <span id="calMonthLabel" class="cal-month"></span>
-              <button type="button" class="cal-nav" id="calNext" aria-label="Next month">›</button>
-            </div>
-            <div class="cal-weekdays">
-              <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
-            </div>
-            <div class="cal-grid" id="calGrid"></div>
-            <div id="slotTimesWrap">
-              <p class="slot-times-label" id="slotTimesLabel">Pick a date above first.</p>
-              <div class="slot-times" id="slotTimes"></div>
-            </div>
-            <button type="button" class="btn btn-ghost" id="slotClose" style="margin-top:18px; width:100%; justify-content:center;">Close</button>
-          </div>
-        </div>
+        <div class="field field-full"><label for="date">Preferred timeframe</label><input id="date" name="date" type="text" placeholder="e.g. any Thursday evening"></div>
         <button type="submit" class="btn btn-solid" id="bookingSubmitBtn">Send request</button>
         <div class="confirm-panel" id="confirmPanel"><strong>Request received.</strong>We'll get back to you within 2 business days with a quote and open dates. Prefer to chat now? <a href="https://ig.me/m/coastanova" target="_blank" rel="noopener">Message us on Instagram</a> or call/text 719-726-1174.</div>
         <div class="confirm-panel" id="errorPanel" style="border-color: #FF5C5C;"><strong style="color:#FF5C5C;">Something went wrong.</strong>Your request wasn't sent — please try again, or reach out directly on <a href="https://ig.me/m/coastanova" target="_blank" rel="noopener">Instagram</a> or call/text 719-726-1174.</div>
@@ -702,161 +627,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   });
 
-  // ---------- Date & time widget ----------
-  // Mirrors the hours shown in the Availability section above.
-  var HOURS_BY_DAY = {
-    0: { start: "17:00", end: "23:00" }, // Sun
-    1: { start: "12:00", end: "23:00" }, // Mon
-    2: { start: "12:00", end: "23:00" }, // Tue
-    3: { start: "12:00", end: "23:00" }, // Wed
-    4: { start: "17:00", end: "23:00" }, // Thu
-    5: { start: "17:00", end: "23:00" }, // Fri
-    6: { start: "17:00", end: "23:00" }  // Sat
-  };
-  var DAY_NAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-  var MONTH_NAMES = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-  var GET_ENDPOINT = "https://script.google.com/macros/s/AKfycbxbztd-zC5A1y33C4VYTihaRDFO3WwQyzO8UZCFfi4I1z3fjbwiLY8eD9CT_Yi55coo/exec";
-
-  var prefDateField = document.getElementById('prefDate');
-  var prefTimeField = document.getElementById('prefTime');
-  var hoursError = document.getElementById('hoursError');
-  var slotTrigger = document.getElementById('slotTrigger');
-  var slotOverlay = document.getElementById('slotOverlay');
-  var slotClose = document.getElementById('slotClose');
-  var calGrid = document.getElementById('calGrid');
-  var calMonthLabel = document.getElementById('calMonthLabel');
-  var calPrev = document.getElementById('calPrev');
-  var calNext = document.getElementById('calNext');
-  var slotTimes = document.getElementById('slotTimes');
-  var slotTimesLabel = document.getElementById('slotTimesLabel');
-
-  var today = new Date(); today.setHours(0,0,0,0);
-  var viewMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  var selectedDateStr = null; // "YYYY-MM-DD"
-  var bookedSlots = []; // [{date:"YYYY-MM-DD", time:"HH:MM"}, ...] already-confirmed bookings
-  var bookedSlotsLoaded = false;
-
-  function pad2(n){ return (n < 10 ? '0' : '') + n; }
-  function dateToStr(d){ return d.getFullYear() + '-' + pad2(d.getMonth()+1) + '-' + pad2(d.getDate()); }
-
-  function fetchBookedSlots(){
-    // Best-effort: if this fails (network, blocked, etc.) we simply don't
-    // gray out any slots — the booking still goes through, Danny confirms
-    // manually either way.
-    fetch(GET_ENDPOINT + '?action=bookedSlots')
-      .then(function(r){ return r.json(); })
-      .then(function(list){ bookedSlots = list || []; bookedSlotsLoaded = true; renderTimesForSelectedDate(); })
-      .catch(function(){ bookedSlotsLoaded = true; });
-  }
-
-  function isSlotBooked(dateStr, timeStr){
-    for (var i = 0; i < bookedSlots.length; i++){
-      if (bookedSlots[i].date === dateStr && bookedSlots[i].time === timeStr) return true;
-    }
-    return false;
-  }
-
-  function renderCalendar(){
-    calMonthLabel.textContent = MONTH_NAMES[viewMonth.getMonth()] + ' ' + viewMonth.getFullYear();
-    calGrid.innerHTML = '';
-    var firstDay = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), 1);
-    var startOffset = firstDay.getDay();
-    var daysInMonth = new Date(viewMonth.getFullYear(), viewMonth.getMonth()+1, 0).getDate();
-
-    for (var i = 0; i < startOffset; i++){
-      var blank = document.createElement('div');
-      blank.className = 'cal-day is-empty';
-      calGrid.appendChild(blank);
-    }
-    for (var day = 1; day <= daysInMonth; day++){
-      var cellDate = new Date(viewMonth.getFullYear(), viewMonth.getMonth(), day);
-      var cellStr = dateToStr(cellDate);
-      var cell = document.createElement('div');
-      cell.className = 'cal-day';
-      cell.textContent = day;
-      if (cellDate < today) {
-        cell.classList.add('is-past');
-      } else {
-        if (cellStr === dateToStr(today)) cell.classList.add('is-today');
-        if (cellStr === selectedDateStr) cell.classList.add('is-selected');
-        cell.addEventListener('click', function(){
-          selectedDateStr = this.dataset.date;
-          renderCalendar();
-          renderTimesForSelectedDate();
-        });
-        cell.dataset.date = cellStr;
-      }
-      calGrid.appendChild(cell);
-    }
-  }
-
-  function renderTimesForSelectedDate(){
-    slotTimes.innerHTML = '';
-    if (!selectedDateStr) {
-      slotTimesLabel.textContent = 'Pick a date above first.';
-      return;
-    }
-    var parts = selectedDateStr.split('-');
-    var d = new Date(parseInt(parts[0],10), parseInt(parts[1],10)-1, parseInt(parts[2],10));
-    var rule = HOURS_BY_DAY[d.getDay()];
-    var dayName = DAY_NAMES[d.getDay()];
-    slotTimesLabel.textContent = dayName + ' — ' + (bookedSlotsLoaded ? 'pick a time' : 'checking availability…');
-
-    var startMin = parseInt(rule.start.slice(0,2),10)*60 + parseInt(rule.start.slice(3),10);
-    var endMin = parseInt(rule.end.slice(0,2),10)*60 + parseInt(rule.end.slice(3),10);
-    var isToday = selectedDateStr === dateToStr(today);
-    var nowMin = today.getHours()*60 + today.getMinutes();
-    if (isToday) nowMin = new Date().getHours()*60 + new Date().getMinutes();
-
-    for (var m = startMin; m < endMin; m += 30){
-      if (isToday && m <= nowMin) continue; // skip past times today
-      var hh = Math.floor(m/60), mm = m%60;
-      var timeStr = pad2(hh) + ':' + pad2(mm);
-      var label = ((hh % 12) || 12) + (mm ? ':' + pad2(mm) : ':00') + (hh < 12 ? ' AM' : ' PM');
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'slot-btn';
-      btn.textContent = label;
-      var booked = isSlotBooked(selectedDateStr, timeStr);
-      if (booked) {
-        btn.classList.add('is-booked');
-        btn.disabled = true;
-        btn.title = 'Already booked';
-      } else {
-        btn.addEventListener('click', function(){
-          document.querySelectorAll('.slot-btn').forEach(function(b){ b.classList.remove('is-selected'); });
-          this.classList.add('is-selected');
-          prefDateField.value = selectedDateStr;
-          prefTimeField.value = this.dataset.time;
-          var pretty = d.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' }) + ' at ' + this.textContent;
-          slotTrigger.textContent = pretty;
-          slotTrigger.classList.add('chosen');
-          hoursError.style.display = 'none';
-          closeSlotPanel();
-        });
-      }
-      btn.dataset.time = timeStr;
-      slotTimes.appendChild(btn);
-    }
-    if (!slotTimes.children.length) {
-      slotTimesLabel.textContent = dayName + ' — no more slots available that day.';
-    }
-  }
-
-  function openSlotPanel(){
-    slotOverlay.hidden = false;
-    if (!bookedSlotsLoaded) fetchBookedSlots();
-    renderCalendar();
-  }
-  function closeSlotPanel(){ slotOverlay.hidden = true; }
-
-  slotTrigger.addEventListener('click', openSlotPanel);
-  slotClose.addEventListener('click', closeSlotPanel);
-  slotOverlay.addEventListener('click', function(e){ if (e.target === slotOverlay) closeSlotPanel(); });
-  calPrev.addEventListener('click', function(){ viewMonth.setMonth(viewMonth.getMonth()-1); renderCalendar(); });
-  calNext.addEventListener('click', function(){ viewMonth.setMonth(viewMonth.getMonth()+1); renderCalendar(); });
-
-  // ---------- Booking form submission ----------
+  // ---------- Booking form ----------
   // Submits natively (HTML form -> hidden iframe) instead of fetch().
   // fetch()/XHR calls to script.google.com are a common target for ad
   // blockers and privacy extensions, which silently drop the request with
@@ -871,26 +642,7 @@ document.addEventListener('DOMContentLoaded', function(){
   var hiddenFrame = document.getElementById('hiddenBookingFrame');
   var armed = false;
 
-  form.addEventListener('submit', function(e){
-    hoursError.style.display = 'none';
-
-    if (!prefDateField.value || !prefTimeField.value) {
-      e.preventDefault();
-      hoursError.style.display = 'block';
-      slotTrigger.focus();
-      hoursError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      return;
-    }
-    // Re-check against the last-fetched booked list as a final guard, in
-    // case someone else grabbed the slot in the time since it loaded.
-    if (isSlotBooked(prefDateField.value, prefTimeField.value)) {
-      e.preventDefault();
-      hoursError.textContent = 'That slot was just booked by someone else — please pick another time.';
-      hoursError.style.display = 'block';
-      hoursError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      return;
-    }
-
+  form.addEventListener('submit', function(){
     // Do NOT preventDefault — let the browser submit the form for real.
     confirmPanel.classList.remove('show');
     errorPanel.classList.remove('show');
@@ -908,10 +660,6 @@ document.addEventListener('DOMContentLoaded', function(){
     submitBtn.textContent = 'Send request';
     confirmPanel.classList.add('show');
     form.reset();
-    slotTrigger.textContent = 'Choose a date & time';
-    slotTrigger.classList.remove('chosen');
-    selectedDateStr = null;
-    bookedSlotsLoaded = false; // refetch next time, in case this slot was just taken
     confirmPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   });
 });
