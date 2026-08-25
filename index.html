@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Danny Roberson — Custom Tattoo Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=Work+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #ECE4D3;
+    --paper-dim: #DFD5BE;
+    --ink: #17140F;
+    --ink-soft: #2A2620;
+    --stencil: #6C5CA6;
+    --stencil-soft: rgba(108,92,166,0.35);
+    --flash: #A9342E;
+    --sage: #6E7452;
+    --display: 'Fraunces', serif;
+    --body: 'Work Sans', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  *{ box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior: smooth; }
+  body{
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  a{ color: inherit; text-decoration: none; }
+  img{ display:block; max-width:100%; }
+  ::selection{ background: var(--stencil); color: var(--paper); }
+  :focus-visible{ outline: 2px solid var(--stencil); outline-offset: 3px; }
+
+  .wrap{ max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position: fixed; top:0; left:0; right:0; z-index: 100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 22px 32px;
+    transition: background .4s ease, padding .4s ease, border-color .4s ease;
+    border-bottom: 1px solid transparent;
+  }
+  nav.scrolled{
+    background: rgba(236,228,211,0.92);
+    backdrop-filter: blur(8px);
+    padding: 14px 32px;
+    border-bottom: 1px solid rgba(23,20,15,0.12);
+  }
+  .brand{ display:flex; align-items:center; gap:10px; font-family: var(--display); font-weight:700; font-size: 1.4rem; letter-spacing: .02em; }
+  .brand .mark{ width: 26px; height:26px; }
+  .brand .mark svg{ width:100%; height:100%; }
+  .navlinks{ display:flex; gap: 34px; font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; font-weight:500; }
+  .navlinks a{ position:relative; padding-bottom:4px; }
+  .navlinks a::after{ content:''; position:absolute; left:0; bottom:0; width:0; height:1px; background: var(--flash); transition: width .3s ease; }
+  .navlinks a:hover::after{ width:100%; }
+  .navlinks a.cta{ text-transform: none; letter-spacing: normal; font-size: .85rem; border: 1px solid var(--ink); padding: 8px 16px; border-radius: 2px; }
+  .navlinks a.cta::after{ display:none; }
+  .navlinks a.cta:hover{ background: var(--ink); color: var(--paper); }
+
+  /* ---------- HERO ---------- */
+  .hero{ position:relative; min-height: 100svh; display:flex; align-items:center; overflow:hidden; padding-top: 90px; }
+  .hero-lines{ position:absolute; inset:0; z-index:0; opacity:.5; pointer-events:none; }
+  .hero-lines svg{ width:100%; height:100%; }
+  .hero-inner{ position:relative; z-index:1; width:100%; }
+  .eyebrow{ font-family: var(--mono); font-size: .78rem; letter-spacing: .18em; text-transform: uppercase; color: var(--flash); margin-bottom: 22px; display:flex; align-items:center; gap:10px; }
+  .eyebrow::before{ content:''; width:26px; height:1px; background: var(--flash); }
+  h1.hero-title{ font-family: var(--display); font-weight: 600; line-height: .96; font-size: clamp(3rem, 8.6vw, 7.2rem); letter-spacing: -.01em; max-width: 15ch; }
+  h1.hero-title em{ font-style: italic; font-weight:500; color: var(--stencil); }
+  h1.hero-title span{ display:block; overflow:hidden; }
+  .word-in{ opacity:0; transform: translateY(100%); display:inline-block; animation: wordUp .9s cubic-bezier(.16,.8,.3,1) forwards; }
+  @keyframes wordUp{ to{ opacity:1; transform: translateY(0); } }
+  .hero-sub{ margin-top: 28px; max-width: 46ch; font-size: 1.08rem; line-height:1.6; color: var(--ink-soft); }
+  .hero-actions{ margin-top: 40px; display:flex; gap:18px; align-items:center; flex-wrap:wrap; }
+  .btn{ font-family: var(--body); font-weight:500; font-size: .92rem; padding: 15px 28px; border-radius: 2px; border: 1px solid var(--ink); cursor:pointer; transition: all .3s ease; display:inline-flex; align-items:center; gap:10px; }
+  .btn-solid{ background: var(--ink); color: var(--paper); }
+  .btn-solid:hover{ background: var(--flash); border-color: var(--flash); }
+  .btn-ghost:hover{ background: var(--ink); color: var(--paper); }
+  .scroll-cue{ position:absolute; bottom: 38px; left: 32px; }
+  .scroll-cue .line{ width:1px; height:40px; background: linear-gradient(var(--ink-soft), transparent); animation: pulseline 2.4s ease-in-out infinite; }
+  @keyframes pulseline{ 0%,100%{opacity:.3} 50%{opacity:1} }
+  #needleTrail{ position:absolute; inset:0; z-index:2; pointer-events:none; }
+
+  /* ---------- REVEAL (JS adds .is-visible; CSS default is visible so content
+     never depends on JS running — this is the fix for "animation doesn't come") ---------- */
+  .reveal{ opacity:1; transform: translateY(0); transition: opacity .9s cubic-bezier(.16,.8,.3,1), transform .9s cubic-bezier(.16,.8,.3,1); }
+  .js .reveal{ opacity:0; transform: translateY(36px); }
+  .js .reveal.is-visible{ opacity:1; transform: translateY(0); }
+
+  .reveal-stagger > *{ opacity:1; transform: translateY(0); transition: opacity .7s ease, transform .7s ease; }
+  .js .reveal-stagger > *{ opacity:0; transform: translateY(28px); }
+  .js .reveal-stagger.is-visible > *{ opacity:1; transform: translateY(0); }
+  .reveal-stagger.is-visible > *:nth-child(1){ transition-delay: .05s; }
+  .reveal-stagger.is-visible > *:nth-child(2){ transition-delay: .12s; }
+  .reveal-stagger.is-visible > *:nth-child(3){ transition-delay: .19s; }
+  .reveal-stagger.is-visible > *:nth-child(4){ transition-delay: .26s; }
+  .reveal-stagger.is-visible > *:nth-child(5){ transition-delay: .33s; }
+  .reveal-stagger.is-visible > *:nth-child(6){ transition-delay: .40s; }
+
+  @media (prefers-reduced-motion: reduce){
+    .js .reveal, .js .reveal-stagger > *, .word-in{ opacity:1 !important; transform:none !important; animation:none !important; }
+    *{ scroll-behavior: auto !important; }
+  }
+
+  section{ padding: 130px 0; position:relative; }
+  .section-head{ margin-bottom: 64px; max-width: 640px; }
+  .kicker{ font-family: var(--mono); font-size: .76rem; letter-spacing:.18em; text-transform:uppercase; color: var(--sage); margin-bottom: 16px; }
+  h2{ font-family: var(--display); font-weight:600; font-size: clamp(2.1rem, 4vw, 3.4rem); letter-spacing:-.01em; }
+  .section-sub{ margin-top:18px; color: var(--ink-soft); font-size: 1.02rem; line-height:1.6; max-width: 54ch; }
+
+  /* ---------- ABOUT ---------- */
+  .about-wrap{ display:grid; grid-template-columns: .9fr 1.1fr; gap: 60px; align-items:center; }
+  .about-photos{ position:relative; }
+  .about-photos img{ width:100%; border-radius: 2px; }
+  .about-photos .p1{ position:relative; z-index:2; }
+  .about-photos .p2{
+    position:absolute; width: 58%; bottom: -40px; right: -34px; z-index:3;
+    border: 6px solid var(--paper); box-shadow: 0 18px 40px rgba(23,20,15,0.25);
+  }
+  .about-text p{ color: var(--ink-soft); font-size: 1.02rem; line-height:1.75; margin-bottom: 18px; }
+  .about-stats{ display:flex; gap: 40px; margin-top: 34px; }
+  .about-stats div{ }
+  .about-stats .num{ font-family: var(--display); font-size: 2rem; font-weight:600; color: var(--flash); }
+  .about-stats .lbl{ font-family: var(--mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.08em; color: var(--ink-soft); }
+  @media (max-width: 860px){
+    .about-wrap{ grid-template-columns: 1fr; }
+    .about-photos{ margin-bottom: 60px; }
+    .about-photos .p2{ right: 0; }
+  }
+
+  /* ---------- WORK / GALLERY ---------- */
+  .filters{ display:flex; gap:10px; flex-wrap:wrap; margin-bottom: 44px; }
+  .filter-btn{ font-family: var(--mono); font-size:.76rem; letter-spacing:.05em; text-transform:uppercase; padding: 9px 16px; border: 1px solid rgba(23,20,15,0.25); border-radius: 999px; cursor:pointer; background: transparent; color: var(--ink); transition: all .25s ease; }
+  .filter-btn:hover{ border-color: var(--ink); }
+  .filter-btn.active{ background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+  .gallery{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 4px; }
+  .piece{ position:relative; aspect-ratio: 4/5; overflow:hidden; cursor:pointer; background: var(--ink); border: 1px solid rgba(23,20,15,0.1); }
+  .piece img{ position:absolute; inset:0; width:100%; height:100%; object-fit: cover; transform: scale(1.06); transition: transform 1.2s ease; }
+  .piece:hover img{ transform: scale(1); }
+  .piece .ghost{
+    position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(115deg, transparent 0 8px, var(--stencil-soft) 8px 9px),
+      repeating-linear-gradient(25deg, transparent 0 10px, rgba(23,20,15,0.35) 10px 11px),
+      var(--paper-dim);
+    opacity: 1; transition: opacity .9s ease;
+  }
+  .js .piece .ghost{ opacity: .96; }
+  .js .piece.is-visible .ghost{ opacity: 0; }
+  .piece .tag{
+    position:absolute; left:14px; bottom:14px; z-index:2; font-family: var(--mono);
+    font-size:.68rem; letter-spacing:.08em; text-transform:uppercase; color: var(--paper);
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+    opacity:0; transform: translateY(8px); transition: opacity .4s ease, transform .4s ease;
+  }
+  .piece:hover .tag{ opacity:1; transform: translateY(0); }
+
+  @media (max-width: 860px){ .gallery{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 540px){ .gallery{ grid-template-columns: 1fr 1fr; gap:3px; } }
+
+  /* ---------- PRICING ---------- */
+  .price-note{ font-family: var(--mono); font-size:.82rem; color: var(--ink-soft); margin-bottom: 50px; padding: 16px 20px; border-left: 2px solid var(--stencil); background: rgba(108,92,166,0.06); max-width: 62ch; line-height:1.7; }
+  .price-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(23,20,15,0.15); border: 1px solid rgba(23,20,15,0.15); }
+  .price-card{ background: var(--paper); padding: 38px 30px; position:relative; transition: background .3s ease; }
+  .price-card:hover{ background: var(--paper-dim); }
+  .price-card .size-label{ font-family: var(--display); font-size: 1.5rem; font-weight:600; margin-bottom:6px; }
+  .price-card .size-dims{ font-family: var(--mono); font-size:.72rem; color: var(--ink-soft); text-transform:uppercase; letter-spacing:.05em; margin-bottom: 22px; }
+  .price-card .price-range{ font-family: var(--mono); font-size: 1.85rem; font-weight:500; color: var(--flash); }
+  .price-card .price-range span{ font-size:.95rem; color: var(--ink-soft); font-weight:400; }
+  .price-card .price-time{ margin-top: 14px; font-size:.85rem; color: var(--ink-soft); }
+  @media (max-width: 860px){ .price-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 560px){ .price-grid{ grid-template-columns: 1fr; } }
+
+  .price-extra{ display:flex; gap: 40px; margin-top: 46px; flex-wrap:wrap; }
+  .price-extra div{ flex:1; min-width: 220px; }
+  .price-extra h4{ font-family: var(--mono); font-size:.74rem; text-transform:uppercase; letter-spacing:.1em; color: var(--sage); margin-bottom:10px; }
+  .price-extra p{ font-size:.92rem; color: var(--ink-soft); line-height:1.6; }
+
+  /* ---------- TESTIMONIALS ---------- */
+  .testi-row{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .testi-card{ background: var(--ink); color: var(--paper); padding: 38px 32px; border-radius: 2px; display:flex; flex-direction:column; justify-content:space-between; min-height: 260px; position:relative; overflow:hidden; }
+  .testi-card::before{ content:'"'; position:absolute; top:-10px; right:16px; font-family: var(--display); font-size: 7rem; color: rgba(236,228,211,0.06); font-weight:600; }
+  .testi-quote{ font-family: var(--display); font-size: 1.18rem; line-height:1.5; font-style:italic; font-weight:500; position:relative; z-index:1; }
+  .testi-meta{ margin-top: 26px; display:flex; align-items:center; gap:12px; font-family: var(--mono); font-size:.74rem; letter-spacing:.04em; }
+  .testi-meta .dot{ width:6px; height:6px; border-radius:50%; background: var(--flash); }
+  @media (max-width: 900px){ .testi-row{ grid-template-columns: 1fr; } }
+
+  /* ---------- BOOKING ---------- */
+  .book-wrap{ display:grid; grid-template-columns: .85fr 1.15fr; gap: 70px; align-items:start; }
+  .book-info h3{ font-family: var(--display); font-size: 1.5rem; font-weight:600; margin-bottom:16px; }
+  .book-info p{ color: var(--ink-soft); line-height:1.7; font-size:.98rem; margin-bottom: 26px; }
+  .book-info ul{ list-style:none; }
+  .book-info li{ display:flex; gap: 14px; padding: 16px 0; border-top: 1px solid rgba(23,20,15,0.15); font-size:.92rem; }
+  .book-info li span.n{ font-family: var(--mono); color: var(--stencil); font-size:.8rem; padding-top:2px; }
+
+  form{ display:flex; flex-direction:column; gap: 20px; }
+  .field-row{ display:grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .field label{ display:block; font-family: var(--mono); font-size:.72rem; text-transform:uppercase; letter-spacing:.08em; margin-bottom:8px; color: var(--ink-soft); }
+  .field input, .field select, .field textarea{ width:100%; background: transparent; border:none; border-bottom: 1px solid rgba(23,20,15,0.3); padding: 11px 2px; font-family: var(--body); font-size: .96rem; color: var(--ink); transition: border-color .3s ease; border-radius:0; }
+  .field textarea{ resize: vertical; min-height: 90px; }
+  .field input:focus, .field select:focus, .field textarea:focus{ border-color: var(--flash); outline:none; }
+  .field-full{ grid-column: 1 / -1; }
+  form .btn{ align-self:flex-start; margin-top: 6px; }
+  @media (max-width: 860px){ .book-wrap{ grid-template-columns: 1fr; } .field-row{ grid-template-columns:1fr; } }
+
+  .confirm-panel{ display:none; padding: 26px; border: 1px solid var(--sage); background: rgba(110,116,82,0.08); font-size:.92rem; line-height:1.6; margin-top: 4px; }
+  .confirm-panel.show{ display:block; }
+  .confirm-panel strong{ font-family: var(--display); font-size:1.05rem; display:block; margin-bottom:6px; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ background: var(--ink); color: var(--paper); padding: 70px 0 34px; }
+  .foot-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap: 40px; padding-bottom: 50px; border-bottom: 1px solid rgba(236,228,211,0.15); }
+  .foot-brand{ font-family: var(--display); font-size: 1.8rem; font-weight:700; max-width: 320px; }
+  .foot-cols{ display:flex; gap: 70px; flex-wrap:wrap; }
+  .foot-col h5{ font-family: var(--mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.1em; color: rgba(236,228,211,0.5); margin-bottom:16px; }
+  .foot-col p, .foot-col a{ display:block; font-size:.88rem; color: rgba(236,228,211,0.85); margin-bottom:8px; }
+  .foot-col a:hover{ color: var(--flash); }
+  .foot-bottom{ display:flex; justify-content:space-between; padding-top: 26px; font-family: var(--mono); font-size:.72rem; color: rgba(236,228,211,0.4); flex-wrap:wrap; gap:10px; }
+
+  @media (max-width: 720px){
+    .navlinks{ display:none; }
+    section{ padding: 90px 0; }
+    .wrap{ padding: 0 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="brand">
+    <span class="mark"><svg viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4 22 L18 8 M14 4 L22 4 L22 12"/><circle cx="6" cy="20" r="1.4" fill="currentColor" stroke="none"/></svg></span>
+    Danny
+  </div>
+  <div class="navlinks">
+    <a href="#about">About</a>
+    <a href="#work">Work</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#book" class="cta">Book a session</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-lines" id="heroLines">
+    <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+      <g stroke="#17140F" stroke-width="0.6" fill="none" opacity="0.5">
+        <path d="M900,60 C1050,120 1120,260 1040,380 C960,500 780,520 720,420" />
+        <path d="M950,90 C1080,150 1140,270 1070,370" />
+        <circle cx="150" cy="620" r="70" />
+        <circle cx="150" cy="620" r="100" opacity="0.5"/>
+        <path d="M60,700 Q150,560 260,700 T460,700" />
+      </g>
+    </svg>
+  </div>
+  <div class="wrap hero-inner">
+    <p class="eyebrow">Custom tattoo studio — Breckenridge, CO</p>
+    <h1 class="hero-title" id="heroTitle"><span>Work worth</span> <span><em>wearing</em> for life.</span></h1>
+    <p class="hero-sub">One artist, one chair, no flash-off-the-wall shortcuts. Fine-line, blackwork, anime, and custom illustrative pieces designed around your story.</p>
+    <div class="hero-actions">
+      <a href="#book" class="btn btn-solid">Book a consultation</a>
+      <a href="#work" class="btn btn-ghost">See the work</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span class="line"></span></div>
+  <canvas id="needleTrail" aria-hidden="true"></canvas>
+</section>
+
+<section id="about" style="background: var(--paper-dim);">
+  <div class="wrap">
+    <div class="about-wrap">
+      <div class="about-photos reveal">
+        <img class="p1" src="images/artist-portrait.jpg" alt="NIL, tattoo artist, portrait">
+        <img class="p2" src="images/artist-at-work.jpg" alt="NIL tattooing a client">
+      </div>
+      <div class="about-text reveal">
+        <p class="kicker">The artist</p>
+        <h2 style="margin-bottom:22px;">Hey, I'm Danny.</h2>
+        <p>I've been tattooing custom pieces for clients who want something that's actually theirs — not a design pulled off a wall. Blackwork, neo-traditional, anime, lettering, whatever the idea calls for.</p>
+        <p>Every session starts with a real conversation about placement, scale, and how the piece will age with you — not just what looks good in a photo.</p>
+        <div class="about-stats">
+          <div><div class="num">9+</div><div class="lbl">Years tattooing</div></div>
+          <div><div class="num">100%</div><div class="lbl">Custom design</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="work">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="kicker">Selected work</p>
+      <h2>Recent pieces</h2>
+      <p class="section-sub">A mix of blackwork, neo-traditional, anime, and lettering — all custom, all healed or fresh work from the chair.</p>
+    </div>
+
+    <div class="filters reveal">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="neotrad">Neo-traditional</button>
+      <button class="filter-btn" data-filter="blackwork">Blackwork</button>
+      <button class="filter-btn" data-filter="illustrative">Illustrative</button>
+      <button class="filter-btn" data-filter="anime">Anime</button>
+      <button class="filter-btn" data-filter="lettering">Lettering</button>
+    </div>
+
+    <div class="gallery reveal-stagger" id="gallery">
+      <div class="piece" data-style="neotrad"><img src="images/tattoo-neotrad-poppy-razor.jpg" alt="Poppy flowers and straight razor tattoo"><div class="ghost"></div><div class="tag">Poppies & razor — neo-traditional</div></div>
+      <div class="piece" data-style="illustrative"><img src="images/tattoo-illustrative-vampire-skull.jpg" alt="Vampire skull with flowers tattoo"><div class="ghost"></div><div class="tag">Vampire skull — illustrative</div></div>
+      <div class="piece" data-style="blackwork"><img src="images/tattoo-blackwork-discgolf.jpg" alt="Disc golf basket blackwork tattoo"><div class="ghost"></div><div class="tag">Disc golf basket — blackwork</div></div>
+      <div class="piece" data-style="blackwork"><img src="images/tattoo-blackwork-bats.jpg" alt="Bats forearm blackwork tattoo"><div class="ghost"></div><div class="tag">Bats — blackwork</div></div>
+      <div class="piece" data-style="illustrative"><img src="images/tattoo-illustrative-cat.jpg" alt="Cartoon cat tattoo"><div class="ghost"></div><div class="tag">Cat — illustrative linework</div></div>
+      <div class="piece" data-style="neotrad"><img src="images/tattoo-neotrad-cowboy-skull.jpg" alt="Cowboy skull with rose tattoo"><div class="ghost"></div><div class="tag">Cowboy skull — neo-traditional</div></div>
+      <div class="piece" data-style="anime"><img src="images/tattoo-anime-portrait.jpg" alt="Anime character portrait tattoo"><div class="ghost"></div><div class="tag">Anime portrait — fine-line</div></div>
+      <div class="piece" data-style="illustrative"><img src="images/tattoo-illustrative-skull-knife.jpg" alt="Skull with knife tattoo"><div class="ghost"></div><div class="tag">Skull & blade — illustrative</div></div>
+      <div class="piece" data-style="lettering"><img src="images/tattoo-lettering-tiles.jpg" alt="Custom lettering tile tattoo"><div class="ghost"></div><div class="tag">Custom lettering</div></div>
+      <div class="piece" data-style="blackwork"><img src="images/tattoo-blackwork-aztec.jpg" alt="Aztec-style ornamental jaguar tattoo"><div class="ghost"></div><div class="tag">Ornamental jaguar — blackwork</div></div>
+      <div class="piece" data-style="anime"><img src="images/tattoo-anime-asta.jpg" alt="Anime character with sword tattoo"><div class="ghost"></div><div class="tag">Anime — linework</div></div>
+      <div class="piece" data-style="neotrad"><img src="images/tattoo-neotrad-hibiscus.jpg" alt="Hibiscus flower ankle tattoo"><div class="ghost"></div><div class="tag">Hibiscus — neo-traditional</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="pricing" style="background: var(--paper-dim);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="kicker">Investment</p>
+      <h2>Pricing guide</h2>
+      <p class="section-sub">Ballpark 2026 market rates for custom work — actual quotes are set at consultation based on placement, detail, and color. A non-refundable deposit ($75–150, applied to the final price) holds your appointment.</p>
+    </div>
+
+    <div class="price-grid reveal-stagger">
+      <div class="price-card"><div class="size-label">Tiny</div><div class="size-dims">Under 2×2 in · 10–20 min</div><div class="price-range">$<span class="count" data-target="60">0</span><span> – $100</span></div><div class="price-time">Shop minimum applies</div></div>
+      <div class="price-card"><div class="size-label">Small</div><div class="size-dims">2–3 in · 30–60 min</div><div class="price-range">$<span class="count" data-target="100">0</span><span> – $250</span></div><div class="price-time">Most single-session flash pieces</div></div>
+      <div class="price-card"><div class="size-label">Medium</div><div class="size-dims">4–6 in · 1–3 hrs</div><div class="price-range">$<span class="count" data-target="250">0</span><span> – $500</span></div><div class="price-time">Custom linework, portraits, tribal-scale</div></div>
+      <div class="price-card"><div class="size-label">Large</div><div class="size-dims">Half-limb / panel · 3–6 hrs</div><div class="price-range">$<span class="count" data-target="500">0</span><span> – $1,200</span></div><div class="price-time">Usually 1–2 sessions</div></div>
+      <div class="price-card"><div class="size-label">Sleeve / Back</div><div class="size-dims">Multi-session</div><div class="price-range">$<span class="count" data-target="1500">0</span><span> – $5,000+</span></div><div class="price-time">Scoped and paid per session</div></div>
+      <div class="price-card"><div class="size-label">Hourly rate</div><div class="size-dims">For time-scoped custom work</div><div class="price-range">$<span class="count" data-target="150">0</span><span> /hr</span></div><div class="price-time">$150–200/hr, mid-tier experienced-artist rate</div></div>
+    </div>
+
+    <div class="price-extra reveal">
+      <div><h4>Why ranges, not fixed prices</h4><p>Size sets the canvas, but detail, color saturation, and placement set the hours — and hours set the price. A quote is locked in at consultation.</p></div>
+      <div><h4>Deposits & rebooking</h4><p>Deposits are non-refundable but transfer once if you reschedule with 48+ hours' notice. No-shows forfeit the deposit and require a new one to rebook.</p></div>
+      <div><h4>Touch-ups</h4><p>One complimentary touch-up within 8 weeks of healing for work booked directly through Danny's studio.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="kicker">Client notes</p>
+      <h2>What it's like in the chair</h2>
+      <p class="section-sub">Sample testimonials — swap in real client quotes (with permission) once you've collected them.</p>
+    </div>
+    <div class="testi-row reveal-stagger">
+      <div class="testi-card"><p class="testi-quote">Sent one reference photo and a paragraph of rambling, got back a design that felt more "me" than what I asked for.</p><div class="testi-meta"><span class="dot"></span>R. Delgado — forearm piece</div></div>
+      <div class="testi-card"><p class="testi-quote">Steady hand, checked in constantly, healed cleaner than my last two tattoos combined.</p><div class="testi-meta"><span class="dot"></span>J. Okafor — blackwork panel</div></div>
+      <div class="testi-card"><p class="testi-quote">Booked a consult expecting a hard sell. Got an honest "this will look better smaller" instead. Trust that.</p><div class="testi-meta"><span class="dot"></span>M. Tran — lettering</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="book" style="background: var(--paper-dim);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="kicker">Get started</p>
+      <h2>Book a session</h2>
+    </div>
+    <div class="book-wrap">
+      <div class="book-info reveal">
+        <h3>How booking works</h3>
+        <p>This form sends your request through — it doesn't hold a slot automatically. Expect a reply within 2 business days with a quote and open dates.</p>
+        <ul>
+          <li><span class="n">01</span> Tell us the idea, size, and placement.</li>
+          <li><span class="n">02</span> We reply with a rough quote and consultation options.</li>
+          <li><span class="n">03</span> Consultation (in-studio or video) locks the design.</li>
+          <li><span class="n">04</span> Deposit confirms your session date.</li>
+        </ul>
+      </div>
+      <form id="bookingForm">
+        <div class="field-row">
+          <div class="field"><label for="name">Full name</label><input id="name" name="name" type="text" required></div>
+          <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required></div>
+        </div>
+        <div class="field-row">
+          <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" type="tel"></div>
+          <div class="field"><label for="size">Estimated size</label>
+            <select id="size" name="size" required>
+              <option value="">Select…</option>
+              <option>Tiny (under 2in)</option><option>Small (2–3in)</option><option>Medium (4–6in)</option>
+              <option>Large (half-limb+)</option><option>Sleeve / multi-session</option><option>Not sure yet</option>
+            </select>
+          </div>
+        </div>
+        <div class="field field-full"><label for="placement">Placement on body</label><input id="placement" name="placement" type="text" placeholder="e.g. inner forearm, ribs, calf"></div>
+        <div class="field field-full"><label for="idea">Describe the idea</label><textarea id="idea" name="idea" placeholder="Subject matter, style, color or black-and-grey, any reference images you'll send separately…" required></textarea></div>
+        <div class="field field-full"><label for="date">Preferred timeframe</label><input id="date" name="date" type="text" placeholder="e.g. any weekday in October"></div>
+        <button type="submit" class="btn btn-solid">Send request</button>
+        <div class="confirm-panel" id="confirmPanel"><strong>Request received.</strong>This is a placeholder confirmation — wire this form to an email service (e.g. Formspree) so submissions actually reach you. See the note at the end of this file.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">Danny Roberson</div>
+      <div class="foot-cols">
+        <div class="foot-col"><h5>Studio</h5><p>Breckenridge, CO</p><p>Tue–Sat, 11am–7pm</p></div>
+        <div class="foot-col"><h5>Contact</h5><a href="#">hello@dannyroberson.example</a><a href="https://instagram.com/hello_im_nil" target="_blank" rel="noopener">@hello_im_nil</a></div>
+        <div class="foot-col"><h5>Studio policy</h5><p>18+ only</p><p>Consult required for custom work</p></div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 Danny Roberson. Update contact details before launch.</span>
+      <span>Site by you, with Claude</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Add .js to <html> immediately — CSS only hides reveal elements when this
+// class is present, so if JS fails to load or errors out, everything is
+// simply visible by default instead of stuck invisible.
+document.documentElement.classList.add('js');
+
+document.addEventListener('DOMContentLoaded', function(){
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- Nav scroll state ----------
+  var nav = document.getElementById('nav');
+  window.addEventListener('scroll', function(){
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // ---------- Hero parallax ----------
+  var heroLines = document.getElementById('heroLines');
+  if (!reduceMotion) {
+    window.addEventListener('scroll', function(){
+      heroLines.style.transform = 'translateY(' + (window.scrollY * 0.18) + 'px)';
+    }, { passive: true });
+  }
+
+  // ---------- Hero headline: assemble line by line ----------
+  document.querySelectorAll('#heroTitle > span').forEach(function(lineEl, lineIdx){
+    var html = lineEl.innerHTML;
+    lineEl.innerHTML = '';
+    var wrapper = document.createElement('span');
+    wrapper.className = 'word-in';
+    wrapper.style.animationDelay = (0.15 + lineIdx * 0.12) + 's';
+    wrapper.innerHTML = html;
+    lineEl.appendChild(wrapper);
+  });
+
+  // ---------- Scroll reveal (with fallback) ----------
+  var revealEls = document.querySelectorAll('.reveal, .reveal-stagger, .piece');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function(el){ io.observe(el); });
+
+    // Safety net: on very short/tall viewports some browsers report a zero
+    // intersection ratio on first paint. Force a re-check shortly after load.
+    setTimeout(function(){
+      revealEls.forEach(function(el){
+        var r = el.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) {
+          el.classList.add('is-visible');
+        }
+      });
+    }, 400);
+  } else {
+    // No IntersectionObserver support: just show everything.
+    revealEls.forEach(function(el){ el.classList.add('is-visible'); });
+  }
+
+  // ---------- Signature move: needle-trail cursor in hero ----------
+  (function needleTrail(){
+    var canvas = document.getElementById('needleTrail');
+    var hero = document.querySelector('.hero');
+    if (!canvas || reduceMotion) return;
+    var ctx = canvas.getContext('2d');
+    var points = [];
+    var raf = null;
+
+    function resize(){ canvas.width = hero.offsetWidth; canvas.height = hero.offsetHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function addPoint(x, y){
+      points.push({ x: x, y: y, life: 1 });
+      if (points.length > 60) points.shift();
+      if (!raf) raf = requestAnimationFrame(draw);
+    }
+    hero.addEventListener('pointermove', function(e){
+      var rect = hero.getBoundingClientRect();
+      addPoint(e.clientX - rect.left, e.clientY - rect.top);
+    });
+
+    function draw(){
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      points.forEach(function(p){
+        p.life -= 0.02;
+        if (p.life > 0){
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, 1.6, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(108,92,166,' + (p.life * 0.8) + ')';
+          ctx.fill();
+        }
+      });
+      points = points.filter(function(p){ return p.life > 0; });
+      raf = points.length ? requestAnimationFrame(draw) : null;
+    }
+  })();
+
+  // ---------- Pricing count-up ----------
+  var countEls = document.querySelectorAll('.count');
+  if ('IntersectionObserver' in window) {
+    var countIo = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        var target = parseInt(el.dataset.target, 10);
+        if (reduceMotion) { el.textContent = target.toLocaleString(); countIo.unobserve(el); return; }
+        var duration = 900;
+        var start = performance.now();
+        function tick(now){
+          var p = Math.min((now - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * eased).toLocaleString();
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        countIo.unobserve(el);
+      });
+    }, { threshold: 0.4 });
+    countEls.forEach(function(el){ countIo.observe(el); });
+  } else {
+    countEls.forEach(function(el){ el.textContent = parseInt(el.dataset.target, 10).toLocaleString(); });
+  }
+
+  // ---------- Gallery filters ----------
+  document.querySelectorAll('.filter-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var filter = btn.dataset.filter;
+      document.querySelectorAll('.piece').forEach(function(piece){
+        var match = filter === 'all' || piece.dataset.style === filter;
+        piece.style.display = match ? '' : 'none';
+      });
+    });
+  });
+
+  // ---------- Booking form ----------
+  var form = document.getElementById('bookingForm');
+  var confirmPanel = document.getElementById('confirmPanel');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    confirmPanel.classList.add('show');
+    confirmPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  });
+});
+</script>
+
+</body>
+</html>
