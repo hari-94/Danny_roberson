@@ -257,10 +257,19 @@
     section{ padding: 84px 0; }
     .wrap{ padding: 0 20px; }
   }
+
+  /* ---------- SCROLL PROGRESS ---------- */
+  #scrollProgress{
+    position: fixed; top:0; left:0; height:3px; width:0%;
+    background: var(--green); z-index: 200;
+    box-shadow: 0 0 10px var(--green-glow), 0 0 2px var(--green);
+    transition: width .08s linear;
+  }
 </style>
 </head>
 <body>
 
+<div id="scrollProgress"></div>
 <nav id="nav">
   <div class="brand">DANNY</div>
   <div class="navlinks">
@@ -559,6 +568,16 @@ document.addEventListener('DOMContentLoaded', function(){
   window.addEventListener('scroll', function(){
     nav.classList.toggle('scrolled', window.scrollY > 40);
   }, { passive: true });
+
+  var scrollProgress = document.getElementById('scrollProgress');
+  function updateScrollProgress(){
+    var scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    var pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+    scrollProgress.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updateScrollProgress, { passive: true });
+  window.addEventListener('resize', updateScrollProgress);
+  updateScrollProgress();
 
   var heroLines = document.getElementById('heroLines');
   if (!reduceMotion) {
