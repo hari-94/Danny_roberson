@@ -265,8 +265,14 @@
      Each word/line sits in an overflow-hidden box so it can rise up from
      behind its own edge. The inner span is what GSAP actually moves. */
   .w, .hero-title .line{ display:inline-block; overflow:hidden; vertical-align:bottom; }
-  .hero-title .line{ display:block; padding-bottom:.06em; }
-  .w{ padding-bottom:.12em; }
+  .hero-title .line{ display:block; padding-bottom:.08em; }
+  /* Bangers leans forward, so a word's final glyph overhangs its advance width
+     and the mask box shears it off. overflow clips at the PADDING box, so the
+     padding gives that overhang somewhere to live; the matching negative margin
+     cancels the added width, leaving word spacing untouched. Pad the right only
+     — padding both sides would leave the negative margins eating the space
+     between words from both directions. */
+  .w{ padding: 0 .18em .14em 0; margin-right: -.18em; }
   .w-i, .hero-title .line-i{ display:inline-block; will-change:transform; }
   .hero-title .line-i{ display:block; }
 
